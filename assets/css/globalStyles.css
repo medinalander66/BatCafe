@@ -9,6 +9,7 @@
   --card-color: #ffffff;
   --accent-color: #95722D;
   --accent2-color: #c18a25;
+  --page-title-color: #c18a25;
   --hover-color: #715821;
   --hover2-color: #ac791b;
   --border-color: #e0e0e0;
@@ -23,6 +24,7 @@ body.dark-mode {
   --card-color: #6e5421;
   --accent-color: #b18c47;
   --accent2-color: #dda336b8;
+  --page-title-color: #c18a25;
   --hover-color: #836523;
   --linear-gradient-theme:linear-gradient(90deg, #c9bda5 0%, #cea252 40%,  #ffc568 100%);
   --hover2-color: #9f7019;
@@ -282,33 +284,6 @@ body.dark-mode .theme-toggle .moon {
 .card:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 14px var(--shadow-color);
-}
-
-/* ---------------------------
-   ✨ Header / Section Titles
---------------------------- */
-header {
-  text-align: center;
-  margin: 30px 0 20px;
-}
-
-.page-title {
-  font-size: 1.8rem;
-  color: var(--accent-color);
-  margin-bottom: 5px;
-}
-
-.subtitle {
-  font-size: 1rem;
-  color: var(--text-color);
-  opacity: 0.8;
-}
-
-.hours {
-  font-size: 0.9rem;
-  color: var(--text-color);
-  opacity: 0.7;
-  margin-top: 5px;
 }
 
 
