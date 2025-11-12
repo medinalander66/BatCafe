@@ -9,10 +9,11 @@
   --card-color: #ffffff;
   --accent-color: #95722D;
   --accent2-color: #c18a25;
-  --page-title-color: #c18a25;
+  --brand-tagline-color: #be8926;
   --hover-color: #715821;
   --hover2-color: #ac791b;
   --border-color: #e0e0e0;
+  --footer-text-color: #9a9a9a;
   --linear-gradient-theme:linear-gradient(90deg, #7d6336 0%, #a37d30 40%,  #daa95a 100%);
   --shadow-color: rgba(0, 0, 0, 0.08);
 }
@@ -24,8 +25,9 @@ body.dark-mode {
   --card-color: #6e5421;
   --accent-color: #b18c47;
   --accent2-color: #dda336b8;
-  --page-title-color: #c18a25;
+  --brand-tagline-color: #f1b33f;
   --hover-color: #836523;
+  --footer-text-color: #9a9a9a;
   --linear-gradient-theme:linear-gradient(90deg, #c9bda5 0%, #cea252 40%,  #ffc568 100%);
   --hover2-color: #9f7019;
   --border-color: #333;
@@ -95,7 +97,7 @@ body {
 
 .brand p {
   font-size: 0.8rem;
-  color: var(--accent2-color);
+  color: var(--brand-tagline-color);
   margin: 0;
 }
 
@@ -342,7 +344,7 @@ body.dark-mode .theme-toggle .moon {
 }
 
 .footer-column ul li a {
-  color: var(--text-color);
+  color: var(--footer-text-color);
   text-decoration: none;
   font-size: 0.95rem;
   transition: color 0.2s ease;
@@ -379,6 +381,7 @@ body.dark-mode .theme-toggle .moon {
   gap: 6px;
   font-size: 0.95rem;
   margin: 4px 0;
+  color: var(--footer-text-color);
 }
 
 .owner-info .icon {
