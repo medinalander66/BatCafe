@@ -221,6 +221,10 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         <span class="sun">☀️</span>
         <span class="moon">🌙</span>
       </button>
+
+       <button class="hamburger" id="hamburger">
+        <img src="assets/images/icons/burger-bar.png" alt="Menu">
+      </button>
     </div>
   </nav>
 
@@ -343,12 +347,52 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     </form>
   </div>
 </main>
-    <!-- 🔹 Footer -->
-    <footer>
-      <p>&copy; 2024 Bat Cave Café. All rights reserved.</p>
-    </footer>
+<!-- 🔹 Footer -->
+<footer class="footer">
+  <div class="footer-column">
+    <div class="footer-logo">
+      <img src="assets/images/batcavecafe.png" alt="Bat Cave Café Logo" />
+      <h4>Bat Cave Café</h4>
+    </div>
+    <p class="footer-desc">
+      Your premier night-time study spot near BSU Malvar Campus.
+    </p>
+  </div>
+
+  <div class="footer-column">
+    <h4>Quick Links</h4>
+    <ul>
+      <li><a href="index.php">Home</a></li>
+      <li><a href="booking.php">Book Now</a></li>
+      <li><a href="menu.php">Menu</a></li>
+    </ul>
+  </div>
+
+  <div class="footer-column">
+    <h4>Support</h4>
+    <ul>
+      <li><a href="#">FAQ</a></li>
+      <li><a href="#">Terms of Service</a></li>
+      <li><a href="#">Privacy Policy</a></li>
+    </ul>
+  </div>
+
+  <div class="footer-column">
+    <h4>Connect with Us</h4>
+    <div class="social-links">
+      <a href="#"><img src="assets/images/icons/facebook-social.png" alt="Facebook"></a>
+      <a href="#"><img src="assets/images/icons/instagram-social.png" alt="Instagram"></a>
+      <a href="#"><img src="assets/images/icons/twitter-social.png" alt="Twitter"></a>
+    </div>
+    <div class="owner-info">
+      <p><span class="icon">📍</span>Location: Near BSU Malvar Campus</p>
+      <p><span class="icon">🚹</span>Owner: Nina Sy</p>
+    </div>
+  </div>
+</footer>
 
   <script src="assets/js/booking.js"></script>
+  <script src="assets/js/navbar.js"></script>
   <script src="assets/js/theme-toggle.js"></script>
 </body>
 </html>

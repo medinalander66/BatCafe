@@ -1,0 +1,128 @@
+/* ---------- Menu Page Styles ---------- */
+
+.menu-header {
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 5px;
+  /* Gradient background */
+  background: var(--linear-gradient-theme);
+  /* These make the gradient paint the text */
+  -webkit-background-clip: text;
+  background-clip: text;
+  /* Make the text transparent so the background shows through */
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  /* Helpful to avoid inheritance or overrides */
+  display: inline-block;
+}
+
+.page-subtitle {
+  color: var(--text-color);
+  opacity: 0.85;
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+/* ---------- Menu Container ---------- */
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  padding: 2rem 1.5rem;
+}
+
+.menu-section {
+  width: 100%;
+  max-width: 900px;
+}
+
+.menu-category {
+  font-size: 1.6rem;
+  color: var(--accent-color);
+  margin-bottom: 1rem;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+/* ---------- Menu Grid ---------- */
+.menu-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3.5rem;
+  justify-content: center;
+}
+
+.menu-card {
+  background: var(--card-bg);
+  color: var(--text-color);
+  border-radius: 15px;
+  box-shadow: 0 4px 10px var(--shadow-color);
+  overflow: hidden;
+  width: 240px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 15px;
+  background: #fff;
+}
+
+.menu-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px var(--shadow-color);
+}
+
+.menu-card img {
+  width: 100%;
+  height: 250px;
+  border-radius: 15px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.menu-card h4 {
+  margin: 0.6rem 1rem 0 1rem;
+  font-size: 1.1rem;
+}
+
+.menu-card p {
+  margin: 0.3rem 1rem 1rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--accent-color);
+}
+
+#book-room-btn {
+  display: block;
+  margin: 2rem auto 0 auto;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent-color);
+  border: none;
+  padding: 15px;
+  border-radius: 15px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px var(--shadow-color);
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .menu-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .menu-card {
+    width: 90%;
+  }
+
+  .menu-category {
+    text-align: center;
+  }
+}

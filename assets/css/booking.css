@@ -16,18 +16,14 @@
   font-weight: 700;
   text-align: center;
   margin-bottom: 5px;
-
   /* Gradient background */
   background: var(--linear-gradient-theme);
-
   /* These make the gradient paint the text */
   -webkit-background-clip: text;
   background-clip: text;
-
   /* Make the text transparent so the background shows through */
   color: transparent;
   -webkit-text-fill-color: transparent;
-
   /* Helpful to avoid inheritance or overrides */
   display: inline-block;
 }
@@ -110,6 +106,7 @@ select:focus {
   background: var(--accent-color);
   color: #fff;
   font-size: 1.2rem;
+  font-weight: 500;
   cursor: pointer;
   transition: background 0.3s;
 }
@@ -202,6 +199,7 @@ select:focus {
 /* ---------- Reserve and Calculate Buttons Wrapper ---------- */
 .reserve-calculate-wrapper {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 25px;
   margin-top: 15px;
