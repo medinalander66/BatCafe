@@ -61,67 +61,84 @@ class BookingSystem {
     }
 
     // Process booking submission
-    public function processBooking($data) {
-        $errors = [];
+   public function processBooking($data) {
+    $errors = [];
 
-        $student_id = trim($data['student_id'] ?? '');
-        $name = trim($data['name'] ?? '');
-        $email = trim($data['email'] ?? '');
-        $phone = trim($data['phone'] ?? '');
-        $reservation_date = trim($data['reservation_date'] ?? '');
-        $start_time = trim($data['start_time'] ?? '');
-        $hours = floatval($data['hours'] ?? 0);
-        $persons = intval($data['persons'] ?? 0);
-        $type = isset($data['type']) && $data['type']==='Gathering' ? 'Gathering' : 'Study';
-        $projector = isset($data['projector']) ? 1 : 0;
-        $speaker = isset($data['speaker']) ? 1 : 0;
+    $student_id = trim($data['student_id'] ?? '');
+    $name = trim($data['name'] ?? '');
+    $email = trim($data['email'] ?? '');
+    $phone = trim($data['phone'] ?? '');
+    $reservation_date_raw = trim($data['reservation_date'] ?? '');
+    $start_time = trim($data['start_time'] ?? '');
+    $hours = floatval($data['hours'] ?? 0);
+    $persons = intval($data['persons'] ?? 0);
+    $type = isset($data['type']) && $data['type'] === 'Gathering' ? 'Gathering' : 'Study';
+    $projector = isset($data['projector']) ? 1 : 0;
+    $speaker = isset($data['speaker']) ? 1 : 0;
+    $year  = intval($data['year'] ?? 0);
+    $month = intval($data['month'] ?? 0);
+    $day   = intval($data['day'] ?? 0);
 
-        // Validation
-        $errors = $this->validateBooking($student_id, $name, $email, $phone, $reservation_date, $start_time, $hours, $persons);
-        if (!empty($errors)) return ['errors'=>$errors];
 
-        $times = $this->computeEndTime($reservation_date, $start_time, $hours);
-        $start = $times['start'];
-        $end = $times['end'];
-
-        // Check rules
-        switch($type) {
-            case 'Gathering':
-                if ($this->checkOverlap($reservation_date, $start, $end)) {
-                    $errors[] = "❌ Cannot reserve Gathering. Room already booked at this time.";
-                }
-                break;
-            case 'Study':
-                if ($this->checkOverlapGathering($reservation_date, $start, $end)) {
-                    $errors[] = "❌ Cannot reserve Study. Gathering reservation overlaps this time.";
-                } elseif ($this->checkStudyCapacity($reservation_date, $start, $end, $persons) > $this->maxStudySeats) {
-                    $errors[] = "❌ Study room full. Cannot add {$persons} more persons.";
-                }
-                break;
-        }
-
-        if (!empty($errors)) return ['errors'=>$errors];
-
-        // Calculate fees
-        $booking_fee = $this->baseRate * $hours;
-        $equipment_fee = (($projector ? $this->equipmentRate : 0)+($speaker ? $this->equipmentRate:0))*$hours;
-        $total_fee = $booking_fee + $equipment_fee;
-
-        // Insert booking
-        $insert = $this->pdo->prepare("
-            INSERT INTO bookings
-            (student_id, name, email, phone, reservation_date, start_time, end_time, hours, persons,
-             projector, speaker_mike, booking_fee, equipment_fee, total_fee, type, is_finished)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
-        ");
-        $insert->execute([
-            $student_id,$name,$email,$phone,$reservation_date,$start,$end,$hours,$persons,
-            $projector,$speaker,$booking_fee,$equipment_fee,$total_fee,$type
-        ]);
-
-        return ['success'=>"✅ Reservation confirmed for <strong>{$type}</strong>! Total: ₱".number_format($total_fee,2).
-            "<br>From {$start} to {$end} for {$persons} person(s)."];
+    $reservation_date = $reservation_date_raw; // Already in YYYY-MM-DD from the dropdowns
+    if (checkdate($month, $day, $year)) {
+        $reservation_date = sprintf('%04d-%02d-%02d', $year, $month, $day);
+    } else {
+        $reservation_date = '';
     }
+
+    // Validation
+    $errors = $this->validateBooking(
+        $student_id, $name, $email, $phone, 
+        $reservation_date, $start_time, $hours, $persons
+    );
+    if (!empty($errors)) return ['errors' => $errors];
+
+    $times = $this->computeEndTime($reservation_date, $start_time, $hours);
+    $start = $times['start'];
+    $end = $times['end'];
+
+    // Check rules
+    switch ($type) {
+        case 'Gathering':
+            if ($this->checkOverlap($reservation_date, $start, $end)) {
+                $errors[] = "❌ Cannot reserve Gathering. Room already booked at this time.";
+            }
+            break;
+        case 'Study':
+            if ($this->checkOverlapGathering($reservation_date, $start, $end)) {
+                $errors[] = "❌ Cannot reserve Study. Gathering reservation overlaps this time.";
+            } elseif ($this->checkStudyCapacity($reservation_date, $start, $end, $persons) > $this->maxStudySeats) {
+                $errors[] = "❌ Study room full. Cannot add {$persons} more persons.";
+            }
+            break;
+    }
+
+    if (!empty($errors)) return ['errors' => $errors];
+
+    // Calculate fees
+    $booking_fee = $this->baseRate * $hours;
+    $equipment_fee = (($projector ? $this->equipmentRate : 0) + ($speaker ? $this->equipmentRate : 0)) * $hours;
+    $total_fee = $booking_fee + $equipment_fee;
+
+    // Insert booking
+    $insert = $this->pdo->prepare("
+        INSERT INTO bookings
+        (student_id, name, email, phone, reservation_date, start_time, end_time, hours, persons,
+         projector, speaker_mike, booking_fee, equipment_fee, total_fee, type, is_finished)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
+    ");
+    $insert->execute([
+        $student_id, $name, $email, $phone, $reservation_date, $start, $end, $hours, $persons,
+        $projector, $speaker, $booking_fee, $equipment_fee, $total_fee, $type
+    ]);
+
+    return [
+        'success' => "✅ Reservation confirmed for <strong>{$type}</strong>! Total: ₱" . number_format($total_fee, 2) .
+        "<br>From {$start} to {$end} for {$persons} person(s)."
+    ];
+}
+
 
     private function validateBooking($student_id, $name, $email, $phone, $reservation_date, $start_time, $hours, $persons) {
         $errors = [];
@@ -172,6 +189,14 @@ class BookingSystem {
         $stmt->execute([$date,$start,$start,$end,$end,$start,$end]);
         return intval($stmt->fetchColumn()) + $newPersons;
     }
+
+    public function ajaxCheckGathering($date, $time, $hours) {
+      $times = $this->computeEndTime($date, $time, $hours);
+      $start = $times['start'];
+      $end   = $times['end'];
+
+    return !$this->checkOverlap($date, $start, $end);
+  }
 }
 
 // Initialize
@@ -180,6 +205,21 @@ $bookingSystem = new BookingSystem($pdo);
 // Handle AJAX
 if(isset($_GET['check_seats']) && $_GET['check_seats']==1){
     $bookingSystem->ajaxCheckSeats($_GET['date'] ?? '', $_GET['time'] ?? '', floatval($_GET['hours'] ?? 0));
+}
+if(isset($_GET['check_gathering']) && $_GET['check_gathering']==1){
+    header('Content-Type: application/json');
+
+    $date = $_GET['date'] ?? '';
+    $time = $_GET['time'] ?? '';
+    $hours = floatval($_GET['hours'] ?? 0);
+
+    $is_available = false;
+    if ($date && $time && $hours > 0) {
+        $is_available = $bookingSystem->ajaxCheckGathering($date, $time, $hours);
+    }
+
+    echo json_encode(['is_available' => $is_available]);
+    exit;
 }
 
 // Handle form submission
@@ -218,8 +258,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
       </ul>
 
       <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-        <span class="sun">☀️</span>
-        <span class="moon">🌙</span>
+        <span class="moon"><img src="/assets/images/icons/night.svg" alt="Dark Mode"></span>
+        <span class="sun"><img src="/assets/images/icons/light.svg" alt="Light Mode"></span>
       </button>
 
        <button class="hamburger" id="hamburger">
@@ -274,6 +314,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
       <!-- ===== Column 2 ===== -->
       <div class="column">
         <label for="reservation_date">Reservation Date *</label>
+        <input type="hidden" name="reservation_date" id="reservation_date">
         <div class="reservation-date-wrapper">
         <!-- Year (readonly, current year) -->
         <input type="number" name="year" id="year" readonly>
@@ -346,6 +387,23 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         <div class="column">
           <button button type="submit" id="submit-btn" class="rc-btn">Reserve</button>
         </div>
+
+        <div id="cost-breakdown-wrapper" class="cost-breakdown-wrapper" style="display:none;">
+        <div class="cost-breakdown-column">
+          <h3>Cost Breakdown</h3>
+          <p>Room Fee (per hour)</p>
+          <p>Equipment Fee</p>
+          <hr>
+          <p id="total-estimated-cost-p">Total Estimated Cost</p>
+        </div>
+        <div class="cost-breakdown-column numbers-column">
+          <p id="room-fee-val">₱0.00</p>
+          <p id="equipment-fee-val">₱0.00</p>
+          <hr>
+          <p id="total-fee-val">₱0.00</p>
+        </div>
+      </div>
+
       </div>
     </form>
   </div>
@@ -393,10 +451,10 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     </div>
   </div>
 </footer>
-
+  <script src="assets/js/theme-toggle.js"></script>
   <script src="assets/js/booking.js"></script>
   <script src="assets/js/navbar.js"></script>
-  <script src="assets/js/theme-toggle.js"></script>
+  <script  src="assets/js/script.js"></script>
 </body>
 </html>
 

@@ -26,8 +26,8 @@
       </ul>
 
       <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-        <span class="sun">☀️</span>
-        <span class="moon">🌙</span>
+        <span class="moon"><img src="/assets/images/icons/night.svg"></span>
+        <span class="sun"><img src="/assets/images/icons/light.svg"></span>
       </button>
 
       <button class="hamburger" id="hamburger">
@@ -165,9 +165,8 @@
     </div>
   </div>
 </footer>
-
-
-  <script src="/assets/js/navbar.js"></script>
   <script src="/assets/js/theme-toggle.js"></script>
+  <script src="/assets/js/navbar.js"></script>
+  <script  src="assets/js/script.js"></script>
 </body>
 </html>

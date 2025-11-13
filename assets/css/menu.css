@@ -106,10 +106,15 @@
   background: var(--accent-color);
   border: none;
   padding: 15px;
-  border-radius: 15px;
+  border-radius: 8px;
   cursor: pointer;
   box-shadow: 0 4px 10px var(--shadow-color);
   transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#book-room-btn:hover {
+  background: var(--hover-color);
+  transform: var(--scale-button-hover);
 }
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
