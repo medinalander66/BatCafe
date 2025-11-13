@@ -50,32 +50,32 @@
       <h3 class="menu-category">Drinks</h3>
       <div class="menu-grid">
         <div class="menu-card">
-          <img src="assets/images/menu/iced-latte.jpg" alt="Iced Latte">
+          <img src="assets/images/menu/iced-latte.jpg" alt="Iced Latte" loading="lazy">
           <h4>Iced Latte</h4>
           <p>₱90</p>
         </div>
         <div class="menu-card">
-          <img src="assets/images/menu/special-bat-brew.jpg" alt="Special Bat Brew">
+          <img src="assets/images/menu/special-bat-brew.jpg" alt="Special Bat Brew" loading="lazy">
           <h4>Special Bat Brew</h4>
           <p>₱110</p>
         </div>
         <div class="menu-card">
-          <img src="assets/images/menu/midnight-mocha.jpg" alt="Midnight Mocha">
+          <img src="assets/images/menu/midnight-mocha.jpg" alt="Midnight Mocha" loading="lazy">
           <h4>Midnight Mocha</h4>
           <p>₱120</p>
         </div>
         <div class="menu-card">
-          <img src="assets/images/menu/caramel-shadow-latte.jpg" alt="Caramel Shadow Latte">
+          <img src="assets/images/menu/caramel-shadow-latte.jpg" alt="Caramel Shadow Latte" loading="lazy">
           <h4>Caramel Shadow Latte</h4>
           <p>₱120</p>
         </div>
         <div class="menu-card">
-          <img src="assets/images/menu/espresso.jpg" alt="Espresso">
+          <img src="assets/images/menu/espresso.jpg" alt="Espresso" loading="lazy">
           <h4>Espresso</h4>
           <p>₱120</p>
         </div>
         <div class="menu-card">
-          <img src="assets/images/menu/green-tea-milkshake-with-whipped-cream.jpg" alt="Green Tea Milkshake">
+          <img src="assets/images/menu/green-tea-milkshake-with-whipped-cream.jpg" alt="Green Tea Milkshake" loading="lazy">
           <h4>Green Tea Milkshake</h4>
           <p>₱120</p>
         </div>
@@ -87,32 +87,32 @@
       <h3 class="menu-category">Food</h3>
       <div class="menu-grid">
         <div class="menu-card">
-          <img src="assets/images/menu/red-velvet-muffin.jpg" alt="Red Velvet Muffin">
+          <img src="assets/images/menu/red-velvet-muffin.jpg" alt="Red Velvet Muffin" loading="lazy">
           <h4>Red Velvet Muffin</h4>
           <p>₱120</p>
         </div>
         <div class="menu-card">
-          <img src="assets/images/menu/nachos-grande.jpg" alt="Nachos Grande">
+          <img src="assets/images/menu/nachos-grande.jpg" alt="Nachos Grande" loading="lazy">
           <h4>Nachos Grande</h4>
           <p>₱150</p>
         </div>
         <div class="menu-card">
-          <img src="assets/images/menu/garlic-bread.png" alt="Garlic Bread">
-          <h4>Club Sandwich</h4>
+          <img src="assets/images/menu/garlic-bread.jpg" alt="Garlic Bread" loading="lazy">
+          <h4>Garlic Bread</h4>
           <p>₱100</p>
         </div>
         <div class="menu-card">
-          <img src="assets/images/menu/chocolate-cave-croissant.jpg" alt="Chocolate Cave Croissant">
+          <img src="assets/images/menu/chocolate-cave-croissant.jpg" alt="Chocolate Cave Croissant" loading="lazy">
           <h4>Chocolate Cave Croissant</h4>
           <p>₱100</p>
         </div>
         <div class="menu-card">
-          <img src="assets/images/menu/cheese-sticks.jpg" alt="Cheese Sticks">
+          <img src="assets/images/menu/cheese-sticks.jpg" alt="Cheese Sticks" loading="lazy">
           <h4>Cheese Sticks</h4>
           <p>₱100</p>
         </div>
         <div class="menu-card">
-          <img src="assets/images/menu/special-night-scone.jpg" alt="Special Night Cone">
+          <img src="assets/images/menu/special-night-scone.jpg" alt="Special Night Cone" loading="lazy">
           <h4>Special Night Cone</h4>
           <p>₱100</p>
         </div>
