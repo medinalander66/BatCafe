@@ -32,9 +32,13 @@ function getSelectedDate() {
 // Check remaining seats (AJAX)
 // ----------------------------
 function checkRemainingSeats() {
+    const remainingWrapper = document.querySelector('.remaining-seats-wrapper');
+
+    // If not "Study" type — hide and reset
     if (typeEl.value !== 'Study') {
         remainingEl.textContent = '';
         submitBtn.disabled = false;
+        remainingWrapper.style.display = 'none';
         return;
     }
 
@@ -42,19 +46,36 @@ function checkRemainingSeats() {
     const time = timeEl.value;
     const hours = parseFloat(hoursEl.value);
 
+    // Only proceed if date/time/hours are valid
     if (!date || !time || !hours) return;
 
     fetch(`booking.php?check_seats=1&date=${date}&time=${time}&hours=${hours}`)
         .then(res => res.json())
         .then(data => {
             console.log('AJAX Response:', data);
+            
+            // Show wrapper once we have a response
+            remainingWrapper.style.display = 'flex';
+
             const remaining = 20 - parseInt(data.current_total, 10);
-            remainingEl.textContent = remaining>0 ? `Remaining Study seats: ${remaining}` : '❌ Study room full at this time';
-            remainingEl.style.color = remaining>0 ? 'green':'red';
-            submitBtn.disabled = remaining<=0;
+
+            // Update message and color
+            if (remaining > 0) {
+                remainingEl.textContent = `Remaining Study seats: ${remaining}`;
+                remainingEl.style.color = 'green';
+                submitBtn.disabled = false;
+            } else {
+                remainingEl.textContent = '❌ Study room full at this time';
+                remainingEl.style.color = 'red';
+                submitBtn.disabled = true;
+            }
         })
-        .catch(err => console.error('AJAX error:', err));
+        .catch(err => {
+            console.error('AJAX error:', err);
+            remainingWrapper.style.display = 'none';
+        });
 }
+
 
 // Trigger when relevant inputs change
 [typeEl, timeEl, hoursEl, monthEl, dayEl].forEach(el => el.addEventListener('change', checkRemainingSeats));

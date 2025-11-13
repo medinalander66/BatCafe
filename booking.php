@@ -244,7 +244,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     <form method="POST" action="booking.php" id="booking-form">
 
     <div class="two-column-form">
-      <label for="type">Room Type:</label>
+      <label for="type">Room Type *</label>
       <select name="type" id="type" required>
         <option value="Study" selected>Study</option>
         <option value="Gathering">Gathering</option>
@@ -252,10 +252,10 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
       <!-- ===== Column 1 ===== -->
       <div class="column">
-        <label for="persons">Number of Persons:</label>
+        <label for="persons">Number of Persons *</label>
         <input type="number" name="persons" id="persons" min="1" max="20" required>
 
-        <label for="start_time">Time Slot:</label>
+        <label for="start_time">Time Slot *</label>
         <div class="time-slot-wrapper">
         <button type="button" class="adjust-btn" id="decrease-time">-</button>
         
@@ -264,16 +264,16 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         <button type="button" class="adjust-btn" id="increase-time">+</button>
         </div>
 
-        <label for="student_id">Student ID:</label>
+        <label for="student_id">Student ID *</label>
         <input type="text" name="student_id" id="student_id" required>
 
-        <label for="email">Email:</label>
+        <label for="email">Email *</label>
         <input type="email" name="email" id="email" required>
       </div>
 
       <!-- ===== Column 2 ===== -->
       <div class="column">
-        <label for="reservation_date">Reservation Date:</label>
+        <label for="reservation_date">Reservation Date *</label>
         <div class="reservation-date-wrapper">
         <!-- Year (readonly, current year) -->
         <input type="number" name="year" id="year" readonly>
@@ -285,7 +285,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         <select name="day" id="day" required></select>
         </div>
 
-        <label for="hours">Duration (Hours):</label>
+        <label for="hours">Duration (Hours) *</label>
         <select name="hours" id="hours" required>
           <option value="1">1</option>
           <option value="1.5">1.5</option>
@@ -312,15 +312,18 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         <option value="12">12</option>
         </select>
 
-        <label for="name">Full Name:</label>
+        <label for="name">Full Name *</label>
         <input type="text" name="name" id="name" required>
 
-        <label for="phone">Phone:</label>
+        <label for="phone">Phone *</label>
         <input type="text" name="phone" id="phone" required>
 
       </div>
 </div>
-      <p id="remaining-seats"></p>
+      <div class="remaining-seats-wrapper">
+          <img src="assets/images/icons/users.png" alt="Users" class="icon" id="users-icon">
+          <p id="remaining-seats"></p>
+      </div>
       
       <div class="equipment-wrapper">
         <label>Rental Equipment (Optional):</label>

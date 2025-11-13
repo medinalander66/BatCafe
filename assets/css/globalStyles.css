@@ -20,17 +20,18 @@
 
 /* 🌙 Dark Mode Overrides */
 body.dark-mode {
-  --bg-color: #2f240c;
+  --bg-color: #181306;
   --text-color: #f1f1f1;
-  --card-color: #6e5421;
-  --accent-color: #a98542;
-  --accent2-color: #dda336b8;
+  --card-color: #3A2C13;
+  --accent-color: #b79961;
+  --accent2-color: #daa239;
   --brand-tagline-color: #f1b33f;
   --hover-color: #836523;
   --footer-text-color: #bfbfbf;
   --linear-gradient-theme:linear-gradient(90deg, #c9bda5 0%, #cea252 40%,  #ffc568 100%);
+  --invert-color: invert(100%) sepia(20%) saturate(500%) hue-rotate(180deg) brightness(100%) contrast(100%);
   --hover2-color: #9f7019;
-  --border-color: #333;
+  --border-color: #615d5d;
   --shadow-color: rgba(255, 255, 255, 0.085);
 }
 
