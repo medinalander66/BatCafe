@@ -1,4 +1,5 @@
-/* -------------------------------
+document.addEventListener("DOMContentLoaded", () => { 
+    /* -------------------------------
         THEME TOGGLE (Mobile + Desktop)
         Now applied on <html> to prevent flash
     --------------------------------*/
@@ -31,3 +32,5 @@
     } else {
         document.documentElement.classList.remove("dark-mode");
     }
+});
+
