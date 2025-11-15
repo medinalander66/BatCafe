@@ -285,3 +285,5 @@ calculateBtn.addEventListener('click', () => {
 [projectorBtn, speakerBtn].forEach(el => el.addEventListener('click', () => {
     if (costVisible) updateCostBreakdown(); // Update if visible
 }));
+
+

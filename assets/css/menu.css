@@ -32,20 +32,23 @@
 
 /* ---------- Menu Container ---------- */
 .menu-container {
+  margin-top: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2.5rem;
+  gap: 10rem;
   padding: 2rem 1.5rem;
 }
 
 .menu-section {
   width: 100%;
-  max-width: 900px;
+  max-width: 1920px;
+
 }
 
 .menu-category {
   font-size: 1.6rem;
+  text-align: center;
   color: var(--accent-color);
   margin-bottom: 1rem;
   border-bottom: 2px solid var(--border-color);
@@ -61,6 +64,7 @@
 }
 
 .menu-card {
+  position: relative;
   background: var(--card-bg);
   color: var(--text-color);
   border-radius: 15px;
@@ -72,18 +76,38 @@
   background: var(--card-color);
 }
 
-.menu-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 16px var(--shadow-color);
+.img-wrapper {
+  position: relative;
+  width: 100%;
 }
 
-.menu-card img {
+.img-wrapper img {
+  display: block;
   width: 100%;
   height: 250px;
   border-radius: 15px;
   object-fit: cover;
   object-position: center;
 }
+
+/* Price tag */
+.img-wrapper .price {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--accent-color);
+  padding: 5px 10px;
+  border-radius: 6px;
+  color: var(--text-color);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.menu-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px var(--shadow-color);
+}
+
 
 .menu-card h4 {
   margin: 0.6rem 1rem 0 1rem;
@@ -99,10 +123,10 @@
 
 #book-room-btn {
   display: block;
-  margin: 2rem auto 0 auto;
+  margin: 0 auto 5em auto;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--text-color);
   background: var(--accent-color);
   border: none;
   padding: 15px;

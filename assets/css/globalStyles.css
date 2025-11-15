@@ -7,8 +7,8 @@
   --bg-color: #f5f5f5;
   --text-color: #222;
   --card-color: #ffffff;
-  --accent-color: #95722D;
-  --accent2-color: #c18a25;
+  --accent-color: #BB903A;
+  --accent2-color: #C58D26;
   --brand-tagline-color: #be8926;
   --hover-color: #715821;
   --hover2-color: #ac791b;
@@ -27,8 +27,8 @@ html.dark-mode, body.dark-mode {
   --bg-color: #181306;
   --text-color: #f1f1f1;
   --card-color: #3A2C13;
-  --accent-color: #b79961;
-  --accent2-color: #daa239;
+  --accent-color: #AB8B4F;
+  --accent2-color: #BE8723;
   --brand-tagline-color: #f1b33f;
   --hover-color: #836523;
   --footer-text-color: #9d9d9d;
@@ -78,6 +78,7 @@ body.no-transition * {
   text-align: center;
   font-weight: 700;
 }
+
 
 /* ---------------------------
    🧭 Navbar
@@ -283,22 +284,72 @@ body.no-transition * {
   transform: scale(1.1);
 }
 
-/* Optional: subtle glow in dark mode */
-body.dark-mode .theme-toggle:hover .moon img {
-  filter: var(--filter-invert-hover-accent-color);
+
+/* Dark Mode – show sun, hide moon */
+.dark-mode .theme-toggle .sun {
+    display: inline-flex;
 }
 
+.dark-mode .theme-toggle .moon {
+    display: none;
+}
 
 .theme-toggle .moon {
   display: flex;
 }
 
-body.dark-mode .theme-toggle .sun {
-  display: flex;
-}
 
-body.dark-mode .theme-toggle .moon {
-  display: none;
+
+
+/* 🔹 Hide mobile-related things on desktop */
+@media (min-width: 769px) {
+  .mobile-nav-modal {
+    display: none;
+  }
+}
+/* ---------------------------
+   📱 Responsive Design Mobile
+--------------------------- */
+@media (max-width: 768px) {
+  .nav-links, .theme-toggle {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .hamburger img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .navbar {
+    flex-wrap: wrap;
+  }
+  .nav-right{
+    position: relative;
+  }
+
+  .brand h1 {
+    font-size: 1rem;
+  }
+
+    .nav-right {
+    position: relative;
+  }
+
+  .brand p {
+    font-size: 0.7rem;
+  }
+
+  .theme-toggle {
+    font-size: 1.1rem;
+  }
+
 }
 
 /* ---------------------------
@@ -325,6 +376,20 @@ body.dark-mode .theme-toggle .moon {
   box-shadow: 0 6px 14px var(--shadow-color);
 }
 
+
+/* ---------------------------
+   📱 Responsive Design for header and page title of body mobile 
+--------------------------- */
+@media (max-width: 768px) {
+
+  header {
+    margin: 20px 0;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+}
 
 /* ---------------------------
     Footer
@@ -428,7 +493,7 @@ body.dark-mode .theme-toggle .moon {
   font-size: 1.1rem;
 }
 
-/* ---------- Responsive ---------- */
+/* ---------- Responsive for footer mobile ---------- */
 @media (max-width: 768px) {
   .footer {
     flex-direction: column;
@@ -447,65 +512,6 @@ body.dark-mode .theme-toggle .moon {
 
 
 /* ---------------------------
-   📱 Responsive Design
---------------------------- */
-@media (max-width: 768px) {
-  .nav-links, .theme-toggle {
-    display: none;
-  }
-
-  .hamburger {
-    display: block;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-
-  .hamburger img {
-    width: 28px;
-    height: 28px;
-  }
-
-  .navbar {
-    flex-wrap: wrap;
-  }
-  .nav-right{
-    position: relative;
-  }
-
-  .brand h1 {
-    font-size: 1rem;
-  }
-
-    .nav-right {
-    position: relative;
-  }
-
-  .brand p {
-    font-size: 0.7rem;
-  }
-
-  .theme-toggle {
-    font-size: 1.1rem;
-  }
-
-  header {
-    margin: 20px 0;
-  }
-
-  .page-title {
-    font-size: 1.5rem;
-  }
-}
-
-/* 🔹 Hide modal-related things on desktop */
-@media (min-width: 769px) {
-  .mobile-nav-modal {
-    display: none;
-  }
-}
-
-/* ---------------------------
    🖱️ Utility Classes
 --------------------------- */
 .text-center {
@@ -522,7 +528,7 @@ body.dark-mode .theme-toggle .moon {
 
 .btn {
   background: var(--accent-color);
-  color: #fff;
+  color: var(--text-color);
   border: none;
   border-radius: 6px;
   padding: 10px 18px;

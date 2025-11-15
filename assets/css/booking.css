@@ -111,7 +111,7 @@ select:focus {
   border: none;
   border-radius: 6px;
   background: var(--accent-color);
-  color: #fff;
+  color: var(--text-color);
   font-size: 1.2rem;
   font-weight: 500;
   cursor: pointer;
@@ -219,7 +219,7 @@ select:focus {
   font-size: 1rem;
   border: none;
   border-radius: 8px;
-  color: #fff;
+  color: var(--text-color);
   cursor: pointer;
   transition: background 0.3s;
 }
