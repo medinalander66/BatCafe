@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Café Admin Dashboard</title>
+    <link rel="stylesheet" href="/assets/css/admin-dashboard.css">
+    <link rel="stylesheet" href="/assets/css/adminGlobalStyles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="admin-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <img src="/assets/images/batcavecafe.png" alt="Logo">
+            <div class="logo-text">
+                <h2>BatCave Café</h2>
+                <p>Admin Panel</p>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span>Booking Management</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </a>
+
+            <a href="../index.php" class="nav-item exit">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Exit</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+<header class="admin-header">
+    <div class="header-left">
+        <h1>Dashboard</h1>
+        <p>Overview of your cafe's performance</p>
+    </div>
+
+    <div class="quick-info-action-wrapper">
+        <div class="theme-toggle-wrapper">
+            <label>Light Mode</label>
+            <button class="theme-toggle" id="theme-toggle">
+                <span class="moon"><img src="/assets/images/icons/night.svg" alt="Dark Mode"></span>
+                <span class="sun"><img src="/assets/images/icons/light.svg" alt="Light Mode"></span>
+            </button>
+        </div>
+
+        <div class="user-short-info-wrapper">
+            <span class="user-name">Admin User</span>
+            <img src="/assets/images/icons/user.png" alt="Admin Avatar" class="admin-avatar">
+        </div>
+    </div>
+</header>
+
+
+
+        <!-- DASHBOARD CARDS -->
+        <section class="dashboard-cards">
+
+            <div class="card">
+                <div class="card-info">
+                    <h3>Total Bookings</h3>
+                    <p>Overall reservations</p>
+                </div>
+                <i class="fa-solid fa-calendar card-icon"></i>
+            </div>
+
+            <div class="card">
+                <div class="card-info">
+                    <h3>Upcoming Bookings</h3>
+                    <p>Future reservations</p>
+                </div>
+                <i class="fa-solid fa-clock card-icon"></i>
+            </div>
+
+            <div class="card">
+                <div class="card-info">
+                    <h3>Total Revenue</h3>
+                    <p>Overall earnings</p>
+                </div>
+                <i class="fa-solid fa-peso-sign card-icon"></i>
+            </div>
+
+            <div class="card">
+                <div class="card-info">
+                    <h3>Today's Bookings</h3>
+                    <p>Reservations today</p>
+                </div>
+                <i class="fa-solid fa-calendar-day card-icon"></i>
+            </div>
+
+            <div class="card">
+                <div class="card-info">
+                    <h3>Most Popular Room Type</h3>
+                    <p>Top demanded room</p>
+                </div>
+                <i class="fa-solid fa-star card-icon"></i>
+            </div>
+
+            <div class="card">
+                <div class="card-info">
+                    <h3>Equipment Revenue</h3>
+                    <p>Add-on earnings</p>
+                </div>
+                <i class="fa-solid fa-plug card-icon"></i>
+            </div>
+
+        </section>
+
+        <!-- KEY STATISTICS -->
+        <section class="key-stats">
+            <h2>Revenue by Room Type</h2>
+            <div class="stats-container">
+                <!-- Placeholder (charts later) -->
+                <p>Chart goes here...</p>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<script src="theme-toggle.js"></script>
+
+</body>
+</html>
