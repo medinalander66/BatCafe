@@ -5,7 +5,7 @@
     <title>Café Admin Dashboard</title>
     <link rel="stylesheet" href="/assets/css/admin-dashboard.css">
     <link rel="stylesheet" href="/assets/css/adminGlobalStyles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 </head>
 
 <body>
@@ -13,7 +13,7 @@
 <div class="admin-container">
 
     <!-- SIDEBAR -->
-    <aside class="sidebar">
+    <!-- <aside class="sidebar">
         <div class="sidebar-logo">
             <img src="/assets/images/batcavecafe.png" alt="Logo">
             <div class="logo-text">
@@ -43,8 +43,8 @@
                 <span>Exit</span>
             </a>
         </nav>
-    </aside>
-
+    </aside> -->
+    <?php include 'asideNavbar.php'; ?>
     <!-- MAIN CONTENT -->
     <main class="main-content">
 
@@ -75,15 +75,15 @@
         <!-- DASHBOARD CARDS -->
         <section class="dashboard-cards">
 
-            <div class="card">
-                <div class="card-info">
+            <div class="card" id="card-total-bookings">
+                <div class="card-info" >
                     <h3>Total Bookings</h3>
                     <p>Overall reservations</p>
                 </div>
                 <i class="fa-solid fa-calendar card-icon"></i>
             </div>
 
-            <div class="card">
+            <div class="card" id="card-upcoming-bookings">
                 <div class="card-info">
                     <h3>Upcoming Bookings</h3>
                     <p>Future reservations</p>
@@ -91,7 +91,7 @@
                 <i class="fa-solid fa-clock card-icon"></i>
             </div>
 
-            <div class="card">
+            <div class="card" id="card-total-revenue">
                 <div class="card-info">
                     <h3>Total Revenue</h3>
                     <p>Overall earnings</p>
@@ -99,7 +99,7 @@
                 <i class="fa-solid fa-peso-sign card-icon"></i>
             </div>
 
-            <div class="card">
+            <div class="card" id="card-todays-bookings">
                 <div class="card-info">
                     <h3>Today's Bookings</h3>
                     <p>Reservations today</p>
@@ -107,7 +107,7 @@
                 <i class="fa-solid fa-calendar-day card-icon"></i>
             </div>
 
-            <div class="card">
+            <div class="card" id="card-most-pplr-room">
                 <div class="card-info">
                     <h3>Most Popular Room Type</h3>
                     <p>Top demanded room</p>
@@ -115,7 +115,7 @@
                 <i class="fa-solid fa-star card-icon"></i>
             </div>
 
-            <div class="card">
+            <div class="card" id="card-equipment-revenue">
                 <div class="card-info">
                     <h3>Equipment Revenue</h3>
                     <p>Add-on earnings</p>
@@ -137,7 +137,7 @@
     </main>
 </div>
 
-<script src="theme-toggle.js"></script>
+<script src="/assets/js/theme-toggle.js"></script>
 
 </body>
 </html>

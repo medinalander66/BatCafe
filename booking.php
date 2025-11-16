@@ -265,7 +265,6 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         <option value="Study" selected>Study</option>
         <option value="Gathering">Gathering</option>
       </select>
-
       <!-- ===== Column 1 ===== -->
       <div class="column">
         <label for="persons">Number of Persons *</label>

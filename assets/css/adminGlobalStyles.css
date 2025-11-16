@@ -1,10 +1,11 @@
 /* GLOBAL */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    transition: background 0.2s ease, color 0.2s ease;
+  margin: 0;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.4s ease, color 0.4s ease;
+  line-height: 1.6;
 }
 
 :root {
@@ -16,7 +17,7 @@ body {
   --brand-tagline-color: #be8926;
   --hover-color: #715821;
   --hover2-color: #ac791b;
-  --border-color: #e0e0e0;
+  --border-color: 1px solid#e0e0e0;
   --footer-text-color: #9a9a9a;
   --linear-gradient-theme:linear-gradient(90deg, #7d6336 0%, #a37d30 40%,  #daa95a 100%);
   --button-selected-bg: #206222;
@@ -24,9 +25,11 @@ body {
   --text-color-accent: #6b4e1a;
   --scale-button-hover: scale(1.03);
   --filter-invert-hover-accent-color:invert(40%) sepia(80%) saturate(600%) hue-rotate(10deg) brightness(95%) contrast(90%);
+  --dashboard-card1-bg-color:#263d89
+
 }
 
-body.dark-mode {
+html.dark-mode,body.dark-mode {
   --bg-color: #181306;
   --text-color: #f1f1f1;
   --card-color: #3A2C13;
@@ -38,13 +41,15 @@ body.dark-mode {
   --linear-gradient-theme:linear-gradient(90deg, #c9bda5 0%, #cea252 40%,  #ffc568 100%);
   --invert-color: invert(100%) sepia(20%) saturate(500%) hue-rotate(180deg) brightness(100%) contrast(100%);
   --hover2-color: #9f7019;
-  --border-color: #524e4e;
+  --border-color: 1px solid #524e4e;
   --button-selected-bg: #2a7d2d;
   --shadow-color: rgba(255, 255, 255, 0.085);
   --text-color-accent: #daa239;
 }
 
-/* LAYOUT */
+/* ---------------------------
+    Layout for ADMIN 
+--------------------------- */
 .admin-container {
     display: flex;
     min-height: 100vh;
@@ -57,7 +62,8 @@ body.dark-mode {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid #ccc;
+    border-right: var(--border-color);
+    transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 .sidebar-logo {
@@ -70,6 +76,7 @@ body.dark-mode {
     width: 55px;
     height: 55px;
     margin-right: 10px;
+    border-radius: 50%;
 }
 
 .logo-text h2 {
@@ -82,7 +89,7 @@ body.dark-mode {
     margin: 0;
     font-size: 13px;
     opacity: 0.7;
-    color: var(--accent2-color);
+    color: var(--brand-tagline-color);
 }
 
 /* NAVIGATION */
@@ -218,6 +225,18 @@ body.dark-mode {
         align-items: flex-start;
     }
 
+    .quick-info-action-wrapper {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
     .quick-info-action-wrapper {
         width: 100%;
         justify-content: space-between;
