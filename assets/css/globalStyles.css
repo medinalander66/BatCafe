@@ -1,43 +1,60 @@
-
-
 /* ---------------------------
    🌈 Color Variables
 --------------------------- */
 :root {
+  --bg-accent-color: #ffffff; /* Main background */
+  --bg-accent2-color: #aa8740; /* Left glow */
+  --bg-accent3-color: #d6900e; /* Right glow */
   --bg-color: #f5f5f5;
   --text-color: #222;
   --card-color: #ffffff;
-  --accent-color: #BB903A;
-  --accent2-color: #C58D26;
+  --accent-color: #bb903a;
+  --accent2-color: #c58d26;
   --brand-tagline-color: #be8926;
   --hover-color: #715821;
   --hover2-color: #ac791b;
   --border-color: #e0e0e0;
   --footer-text-color: #9a9a9a;
-  --linear-gradient-theme:linear-gradient(90deg, #7d6336 0%, #a37d30 40%,  #daa95a 100%);
+  --linear-gradient-theme: linear-gradient(
+    90deg,
+    #7d6336 0%,
+    #a37d30 40%,
+    #daa95a 100%
+  );
   --button-selected-bg: #206222;
   --shadow-color: rgba(0, 0, 0, 0.08);
   --text-color-accent: #6b4e1a;
   --scale-button-hover: scale(1.03);
-  --filter-invert-hover-accent-color:invert(40%) sepia(80%) saturate(600%) hue-rotate(10deg) brightness(95%) contrast(90%);
+  --filter-invert-hover-accent-color: invert(40%) sepia(80%) saturate(600%)
+    hue-rotate(10deg) brightness(95%) contrast(90%);
 }
 
 /* 🌙 Dark Mode Overrides */
-html.dark-mode, body.dark-mode {
-  --bg-color: #181306;
+html.dark-mode,
+body.dark-mode {
+  --bg-accent-color: #ffffff; /* Main background */
+  --bg-accent2-color: #c39a47; /* Left glow */
+  --bg-accent3-color: #ffa200; /* Right glow */
+  --bg-color: #1c1708;
   --text-color: #f1f1f1;
-  --card-color: #3A2C13;
-  --accent-color: #AB8B4F;
-  --accent2-color: #BE8723;
+  --card-color: #3a2c13;
+  --accent-color: #ab8b4f;
+  --accent2-color: #be8723;
   --brand-tagline-color: #f1b33f;
   --hover-color: #836523;
   --footer-text-color: #9d9d9d;
-  --linear-gradient-theme:linear-gradient(90deg, #c9bda5 0%, #cea252 40%,  #ffc568 100%);
-  --invert-color: invert(100%) sepia(20%) saturate(500%) hue-rotate(180deg) brightness(100%) contrast(100%);
+  --linear-gradient-theme: linear-gradient(
+    90deg,
+    #c9bda5 0%,
+    #cea252 40%,
+    #ffc568 100%
+  );
+  --invert-color: invert(100%) sepia(20%) saturate(500%) hue-rotate(180deg)
+    brightness(100%) contrast(100%);
   --hover2-color: #9f7019;
   --border-color: #524e4e;
   --button-selected-bg: #2a7d2d;
-  --shadow-color: rgba(255, 255, 255, 0.085);
+  --shadow-color: rgba(5, 5, 5, 0.085);
   --text-color-accent: #daa239;
 }
 
@@ -50,19 +67,48 @@ html.dark-mode, body.dark-mode {
   padding: 0;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
+  
 }
 
 body {
-  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  font-family: "Poppins", "Segoe UI", sans-serif;
   background: var(--bg-color);
   color: var(--text-color);
   transition: background-color 0.4s ease, color 0.4s ease;
   line-height: 1.6;
+}
+
+body::before,
+body::after {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(180px);
+  opacity: 0.25;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* LEFT GLOW */
+body::before {
+  background: var(--bg-accent2-color);
+  top: -150px;
+  left: 50px;
+}
+
+/* RIGHT GLOW */
+body::after {
+  background: var(--bg-accent3-color);
+  top: -150px;
+  right: -200px;
 }
 
 /* 🚫 Disable transitions temporarily on page load */
@@ -71,14 +117,13 @@ body.no-transition * {
   transition: none !important;
 }
 
-.msg{
+.msg {
   color: #8f0404;
   font-size: 0.9rem;
   margin-top: 4px;
   text-align: center;
   font-weight: 700;
 }
-
 
 /* ---------------------------
    🧭 Navbar
@@ -156,9 +201,9 @@ body.no-transition * {
 
 .mobile-nav-modal.active {
   display: flex;
-    transition: background 0.3s ease, color 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease;
   transition: background-color 0.4s ease, color 0.4s ease;
-  right: 0; 
+  right: 0;
 }
 
 /* Close (X) Button */
@@ -237,7 +282,7 @@ body.no-transition * {
 }
 
 .nav-links a::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   bottom: -4px;
@@ -271,7 +316,8 @@ body.no-transition * {
   display: none;
 }
 /* 🌞 Sun Hover Accent Effect */
-.theme-toggle .sun img, .theme-toggle .moon img {
+.theme-toggle .sun img,
+.theme-toggle .moon img {
   width: 28.55px;
   height: 23px;
   transition: filter 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
@@ -279,27 +325,24 @@ body.no-transition * {
 }
 
 /* Hover effect: accent glow + slight scale */
-.theme-toggle:hover .sun img, .theme-toggle:hover .moon img {
+.theme-toggle:hover .sun img,
+.theme-toggle:hover .moon img {
   filter: var(--filter-invert-hover-accent-color);
   transform: scale(1.1);
 }
 
-
 /* Dark Mode – show sun, hide moon */
 .dark-mode .theme-toggle .sun {
-    display: inline-flex;
+  display: inline-flex;
 }
 
 .dark-mode .theme-toggle .moon {
-    display: none;
+  display: none;
 }
 
 .theme-toggle .moon {
   display: flex;
 }
-
-
-
 
 /* 🔹 Hide mobile-related things on desktop */
 @media (min-width: 769px) {
@@ -311,7 +354,8 @@ body.no-transition * {
    📱 Responsive Design Mobile
 --------------------------- */
 @media (max-width: 768px) {
-  .nav-links, .theme-toggle {
+  .nav-links,
+  .theme-toggle {
     display: none;
   }
 
@@ -330,7 +374,7 @@ body.no-transition * {
   .navbar {
     flex-wrap: wrap;
   }
-  .nav-right{
+  .nav-right {
     position: relative;
   }
 
@@ -338,7 +382,7 @@ body.no-transition * {
     font-size: 1rem;
   }
 
-    .nav-right {
+  .nav-right {
     position: relative;
   }
 
@@ -349,7 +393,6 @@ body.no-transition * {
   .theme-toggle {
     font-size: 1.1rem;
   }
-
 }
 
 /* ---------------------------
@@ -376,12 +419,10 @@ body.no-transition * {
   box-shadow: 0 6px 14px var(--shadow-color);
 }
 
-
 /* ---------------------------
    📱 Responsive Design for header and page title of body mobile 
 --------------------------- */
 @media (max-width: 768px) {
-
   header {
     margin: 20px 0;
   }
@@ -405,9 +446,9 @@ body.no-transition * {
   gap: 40px;
 }
 
-.footer p{
+.footer p {
   color: var(--footer-text-color);
-  font-size: 0.95rem
+  font-size: 0.95rem;
 }
 
 .footer-column {
@@ -510,7 +551,6 @@ body.no-transition * {
   }
 }
 
-
 /* ---------------------------
    🖱️ Utility Classes
 --------------------------- */
@@ -518,13 +558,25 @@ body.no-transition * {
   text-align: center;
 }
 
-.mt-1 { margin-top: 8px; }
-.mt-2 { margin-top: 16px; }
-.mt-3 { margin-top: 24px; }
+.mt-1 {
+  margin-top: 8px;
+}
+.mt-2 {
+  margin-top: 16px;
+}
+.mt-3 {
+  margin-top: 24px;
+}
 
-.mb-1 { margin-bottom: 8px; }
-.mb-2 { margin-bottom: 16px; }
-.mb-3 { margin-bottom: 24px; }
+.mb-1 {
+  margin-bottom: 8px;
+}
+.mb-2 {
+  margin-bottom: 16px;
+}
+.mb-3 {
+  margin-bottom: 24px;
+}
 
 .btn {
   background: var(--accent-color);

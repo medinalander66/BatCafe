@@ -6,6 +6,7 @@ body {
   color: var(--text-color);
   transition: background-color 0.4s ease, color 0.4s ease;
   line-height: 1.6;
+
 }
 
 :root {
@@ -85,6 +86,7 @@ body.dark-mode {
   --booking-table-btn2-bg-color: #4c994c;
   --booking-table-btn3-bg-color: #ad423e;
   --booking-table-btn4-bg-color: #4691a8;
+  
 }
 
 /* ---------------------------

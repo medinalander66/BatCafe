@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <script src="/assets/js/script.js"></script>
     <meta charset="UTF-8">
     <title>Café Admin Dashboard</title>
     <link rel="stylesheet" href="/assets/css/admin-dashboard.css">
