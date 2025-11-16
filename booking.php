@@ -156,7 +156,7 @@ class BookingSystem {
     private function checkOverlap($date,$start,$end){
         $stmt=$this->pdo->prepare("
             SELECT COUNT(*) FROM bookings
-            WHERE reservation_date=? AND is_finished=0
+            WHERE reservation_date=? AND  =0
               AND ((start_time<=? AND end_time>? )
                    OR (start_time<? AND end_time>=? )
                    OR (start_time>=? AND end_time<=? ))

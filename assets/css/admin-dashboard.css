@@ -1,136 +1,109 @@
 /* ---------- Admin Dashboard Styles ---------- */
-:root {
-    --dashboard-card1-bg-color: #415cb5;
-    --dashboard-card2-bg-color: #5f35a8;
-    --dashboard-card3-bg-color: #a6337d;
-    --dashboard-card4-bg-color: #a13535;
-    --dashboard-card5-bg-color: #29935e;
-    --dashboard-card6-bg-color: #ad5e18;
-}
-
-html.dark-mode{
-    --dashboard-card1-bg-color: #213371;
-    --dashboard-card2-bg-color: #502c8e;
-    --dashboard-card3-bg-color: #76255a;
-    --dashboard-card4-bg-color: #6c2323;
-    --dashboard-card5-bg-color: #1d7448;
-    --dashboard-card6-bg-color: #945015;
-}
-/* MAIN CONTENT */
-.main-content {
-    flex: 1;
-    padding: 30px;
-}
-
 
 /* CARDS */
 .dashboard-cards {
-    margin: auto;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .card {
-    background: var(--card-color);
-    flex: 1 1 280px;
-    padding: 20px;
-    border-radius: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0px 2px 8px rgba(0,0,0,0.08);
-    max-width: 300px;
+  background: var(--card-color);
+  flex: 1 1 280px;
+  padding: 20px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
+  max-width: 300px;
 }
 
 .card-info h3 {
-    margin: 0;
-    font-size: 18px;
+  margin: 0;
+  font-size: 18px;
 }
 
 .card-info p {
-    margin: 0;
-    opacity: 0.7;
+  margin: 0;
+  opacity: 0.7;
 }
 
 .card-icon {
-    font-size: 40px;
-    opacity: 0.4;
-    padding: 15px;
-    border-radius: 15px;
+  font-size: 40px;
+  opacity: 0.4;
+  padding: 15px;
+  border-radius: 15px;
 }
 
-
-
-#card-total-bookings{
-    background: var(--dashboard-card1-bg-color);
-    color: var(--text-color);
+#card-total-bookings {
+  background: var(--dashboard-card1-bg-color);
+  color: var(--text-color);
 }
 
 #card-todays-bookings {
-    background: var(--dashboard-card2-bg-color);
-    color: var(--text-color);
+  background: var(--dashboard-card2-bg-color);
+  color: var(--text-color);
 }
 
 #card-most-pplr-room {
-    background: var(--dashboard-card3-bg-color);
-    color: var(--text-color);
+  background: var(--dashboard-card3-bg-color);
+  color: var(--text-color);
 }
 
 #card-equipment-revenue {
-    background: var(--dashboard-card4-bg-color);
-    color: var(--text-color);
+  background: var(--dashboard-card4-bg-color);
+  color: var(--text-color);
 }
 
 #card-total-revenue {
-    background: var(--dashboard-card5-bg-color);
-    color: var(--text-color);
+  background: var(--dashboard-card5-bg-color);
+  color: var(--text-color);
 }
 
 #card-upcoming-bookings {
-    background: var(--dashboard-card6-bg-color);
-    color: var(--text-color);
+  background: var(--dashboard-card6-bg-color);
+  color: var(--text-color);
 }
 
 /* KEY STATS */
 .key-stats {
-    margin-top: 40px;
-    background: var(--card-color);
-    padding: 30px;
-    border-radius: 15px;
+  margin-top: 40px;
+  background: var(--card-color);
+  padding: 30px;
+  border-radius: 15px;
 }
 
 .key-stats h2 {
-    margin-bottom: 20px;
-    color: var(--accent2-color)
+  margin-bottom: 20px;
+  color: var(--accent2-color);
 }
 
 .stats-container {
-    background: var(--bg-color);
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0px 2px 8px rgba(0,0,0,0.08);
-    color:var(--text-color);
+  background: var(--bg-color);
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
+  color: var(--text-color);
 }
 
 /* MOBILE */
 @media (max-width: 768px) {
-    .dashboard-cards {
-        flex-direction: row;
-        gap: 10px;
-    }
-    .card {
-        max-width: 150px;
-        max-height: 150px;
-    }
+  .dashboard-cards {
+    flex-direction: row;
+    gap: 10px;
+  }
+  .card {
+    max-width: 150px;
+    max-height: 150px;
+  }
 
+  .sidebar.open {
+    left: 0;
+  }
 
-    .sidebar.open {
-        left: 0;
-    }
-
-    .main-content {
-        padding: 20px;
-    }
+  .main-content {
+    padding: 20px;
+  }
 }

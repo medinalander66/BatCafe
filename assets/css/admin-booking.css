@@ -1,0 +1,156 @@
+/* -------------------------------------------
+   BOOKING TABLE LAYOUT
+-------------------------------------------- */
+
+.booking-management {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* Controls */
+.booking-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.booking-controls input,
+.booking-controls select {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: var(--border-color);
+  background: var(--card-color);
+  color: var(--text-color);
+  flex: 1;
+  min-width: 150px;
+}
+
+.add-booking-btn {
+  background: var(--accent2-color);
+  border: none;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.2s;
+}
+
+.add-booking-btn:hover {
+  transform: var(--scale-button-hover);
+}
+
+/* TABLE */
+.table-container {
+  overflow-x: auto; /* mobile scroll */
+  background: var(--card-color);
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px var(--shadow-color);
+}
+
+.booking-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.booking-table th {
+  text-align: center;
+  padding: 12px;
+  color: #fff;
+  font-size: 14px;
+  background: var(--accent2-color);
+}
+
+#th-customer {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+#th-actions {
+  text-align: center;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.booking-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+  text-align: center;
+}
+
+/* Status Pills */
+.status-pill {
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-pill.pending {
+  background: var(--booking-table-btn1-bg-color);
+  color: var(--text-color);
+}
+.status-pill.confirmed {
+  background: var(--booking-table-btn2-bg-color);
+  color: var(--text-color);
+}
+.status-pill.cancelled {
+  background: var(--booking-table-btn3-bg-color);
+  color: var(--text-color);
+}
+
+/* Actions */
+.actions-td  {
+  white-space: nowrap;
+}
+
+.actions-td button {
+  padding: 7px 10px;
+  margin: 2px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.2s;
+}
+
+.btn-view {
+  background: var(--booking-table-btn4-bg-color);
+  color: var(--text-color);
+}
+.btn-confirm {
+  background: var(--booking-table-btn2-bg-color);
+  color: var(--text-color);
+}
+.btn-cancel {
+  background: var(--booking-table-btn3-bg-color);
+  color: var(--text-color);
+}
+.btn-revert {
+  background: var(--booking-table-btn1-bg-color);
+  color: var(--text-color);
+}
+
+.status-pill.status-pill {
+  max-width: 80px;
+  text-align: center;
+}
+
+.actions-td button:hover {
+  transform: scale(1.05);
+}
+
+/* 📱 MOBILE (Stack columns nicely) */
+@media (max-width: 768px) {
+  .booking-table th:nth-child(3),
+  .booking-table td:nth-child(3),
+  .booking-table th:nth-child(4),
+  .booking-table td:nth-child(4) {
+    display: none; /* hide time + room for small screen */
+  }
+}
