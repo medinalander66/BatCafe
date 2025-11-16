@@ -6,6 +6,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  padding: 30px;
 }
 
 .card {
@@ -18,17 +19,21 @@
   align-items: center;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
   max-width: 300px;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
-.card-info h3 {
+.card-info h2 {
   margin: 0;
-  font-size: 18px;
+  font-size: 34px;
 }
 
 .card-info p {
   margin: 0;
   opacity: 0.7;
+  color: var(--text-color);
+  font-weight: bold;
 }
+
 
 .card-icon {
   font-size: 40px;
@@ -39,43 +44,38 @@
 
 #card-total-bookings {
   background: var(--dashboard-card1-bg-color);
-  color: var(--text-color);
 }
 
 #card-todays-bookings {
   background: var(--dashboard-card2-bg-color);
-  color: var(--text-color);
 }
 
 #card-most-pplr-room {
   background: var(--dashboard-card3-bg-color);
-  color: var(--text-color);
 }
 
 #card-equipment-revenue {
   background: var(--dashboard-card4-bg-color);
-  color: var(--text-color);
 }
 
 #card-total-revenue {
   background: var(--dashboard-card5-bg-color);
-  color: var(--text-color);
 }
 
 #card-upcoming-bookings {
   background: var(--dashboard-card6-bg-color);
-  color: var(--text-color);
 }
 
 /* KEY STATS */
 .key-stats {
-  margin-top: 40px;
+  margin: 30px ;
   background: var(--card-color);
   padding: 30px;
   border-radius: 15px;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
-.key-stats h2 {
+.key-stats h2 { 
   margin-bottom: 20px;
   color: var(--accent2-color);
 }
@@ -86,6 +86,8 @@
   border-radius: 15px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
   color: var(--text-color);
+    transition: background-color 0.25s ease, color 0.25s ease;
+
 }
 
 /* MOBILE */

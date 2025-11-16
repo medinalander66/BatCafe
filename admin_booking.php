@@ -2,7 +2,7 @@
 require_once 'db/connect.php';
 
 /* ============================================
-   BOOKING MANAGER CLASS (REUSABLE / OOP)
+   BOOKING MANAGER CLASS 
 ============================================ */
 class BookingManager
 {
@@ -14,48 +14,53 @@ class BookingManager
     }
 
     /* Fetch all bookings with filters */
-    public function getBookings($search = "", $status = "all", $dateFilter = "all")
+    public function getAllBookings($filters = [])
     {
-        $query = "SELECT * FROM bookings WHERE 1";
+        $sql = "SELECT * FROM bookings";
+        $conditions = [];
         $params = [];
 
-        // Search Filter
-        if (!empty($search)) {
-            $query .= " AND (name LIKE ? OR reservation_date LIKE ? OR type LIKE ?)";
-            $searchTerm = "%$search%";
-            $params[] = $searchTerm;
-            $params[] = $searchTerm;
-            $params[] = $searchTerm;
+        if (!empty($filters['status']) && $filters['status'] !== 'all') {
+            $conditions[] = "status = :status";
+            $params[':status'] = $filters['status'];
         }
 
-        // Status Filter
-        if ($status !== "all") {
-            $query .= " AND status = ?";
-            $params[] = $status;
+        if (!empty($filters['date']) && $filters['date'] !== 'all') {
+            if ($filters['date'] === 'today') {
+                $conditions[] = "reservation_date = CURDATE()";
+            } elseif ($filters['date'] === 'upcoming') {
+                $conditions[] = "reservation_date > CURDATE()";
+            } elseif ($filters['date'] === 'past') {
+                $conditions[] = "reservation_date < CURDATE()";
+            } else {
+                $conditions[] = "reservation_date = :date";
+                $params[':date'] = $filters['date'];
+            }
         }
 
-        // Date Filter
-        if ($dateFilter === "today") {
-            $query .= " AND reservation_date = CURDATE()";
-        } elseif ($dateFilter === "upcoming") {
-            $query .= " AND reservation_date > CURDATE()";
-        } elseif ($dateFilter === "past") {
-            $query .= " AND reservation_date < CURDATE()";
+        if (!empty($filters['search'])) {
+            $conditions[] = "(name LIKE :search OR student_id LIKE :search OR type LIKE :search)";
+            $params[':search'] = '%' . $filters['search'] . '%';
         }
 
-        $query .= " ORDER BY reservation_date ASC, start_time ASC";
+        if (!empty($conditions)) {
+            $sql .= " WHERE " . implode(" AND ", $conditions);
+        }
 
-        $stmt = $this->pdo->prepare($query);
+        $sql .= " ORDER BY reservation_date DESC, start_time ASC";
+
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
     /* Change Booking Status */
-    public function updateBookingStatus($id, $newStatus)
+    public function updateBookingStatus($id, $status)
     {
         $stmt = $this->pdo->prepare("UPDATE bookings SET status = ? WHERE id = ?");
-        return $stmt->execute([$newStatus, $id]);
+        $stmt->execute([$status, $id]);
     }
 }
 
@@ -78,9 +83,18 @@ if (isset($_POST['action'])) {
     } elseif ($action === "revert") {
         $manager->updateBookingStatus($id, "pending");
     }
+}
 
-    // Refresh page after updating status
-    header("Location: admin_booking.php");
+// AJAX request to fetch filtered bookings
+if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+    header('Content-Type: application/json');
+    $filters = [
+        'search' => $_GET['search'] ?? '',
+        'status' => $_GET['status'] ?? 'all',
+        'date' => $_GET['date'] ?? 'all'
+    ];
+    $bookings = $manager->getAllBookings($filters);
+    echo json_encode($bookings);
     exit;
 }
 
@@ -88,11 +102,13 @@ if (isset($_POST['action'])) {
 /* ============================================
    FETCH BOOKINGS WITH FILTERS
 ============================================ */
-$search = $_GET['search'] ?? "";
-$status = $_GET['status'] ?? "all";
-$dateFilter = $_GET['date'] ?? "all";
+$filters = [
+    'search' => $_GET['search'] ?? '',
+    'status' => $_GET['status'] ?? 'all',
+    'date'   => $_GET['date'] ?? 'all'
+];
 
-$bookings = $manager->getBookings($search, $status, $dateFilter);
+$bookings = $manager->getAllBookings($filters);
 
 ?>
 <!DOCTYPE html>
@@ -128,22 +144,22 @@ $bookings = $manager->getBookings($search, $status, $dateFilter);
 
                     <form method="GET" class="filters-form">
 
-                        <input type="text" name="search" placeholder="Search..."
-                            value="<?= htmlspecialchars($search) ?>">
+                        <input type="text" id="searchBooking" placeholder="Search by name, date, or room...">
 
-                        <select name="status">
-                            <option value="all" <?= $status === "all" ? "selected" : "" ?>>All Status</option>
-                            <option value="pending" <?= $status === "pending" ? "selected" : "" ?>>Pending</option>
-                            <option value="confirmed" <?= $status === "confirmed" ? "selected" : "" ?>>Confirmed</option>
-                            <option value="cancelled" <?= $status === "cancelled" ? "selected" : "" ?>>Cancelled</option>
+                        <select id="filterStatus" name="status">
+                            <option value="all" <?= $filters === "all" ? "selected" : "" ?>>All Status</option>
+                            <option value="pending" <?= $filters === "pending" ? "selected" : "" ?>>Pending</option>
+                            <option value="confirmed" <?= $filters === "confirmed" ? "selected" : "" ?>>Confirmed</option>
+                            <option value="cancelled" <?= $filters === "cancelled" ? "selected" : "" ?>>Cancelled</option>
                         </select>
 
-                        <select name="date">
-                            <option value="all" <?= $dateFilter === "all" ? "selected" : "" ?>>All Dates</option>
-                            <option value="today" <?= $dateFilter === "today" ? "selected" : "" ?>>Today</option>
-                            <option value="upcoming" <?= $dateFilter === "upcoming" ? "selected" : "" ?>>Upcoming</option>
-                            <option value="past" <?= $dateFilter === "past" ? "selected" : "" ?>>Past</option>
+                        <select id="filterDate" name="date">
+                            <option value="all" <?= $filters === "all" ? "selected" : "" ?>>All Dates</option>
+                            <option value="today" <?= $filters === "today" ? "selected" : "" ?>>Today</option>
+                            <option value="upcoming" <?= $filters === "upcoming" ? "selected" : "" ?>>Upcoming</option>
+                            <option value="past" <?= $filters === "past" ? "selected" : "" ?>>Past</option>
                         </select>
+
 
                         <button type="submit" class="filter-btn">Apply Filters</button>
                     </form>
@@ -163,68 +179,8 @@ $bookings = $manager->getBookings($search, $status, $dateFilter);
                             </tr>
                         </thead>
 
-                        <tbody>
-                            <?php if (empty($bookings)): ?>
-                                <tr>
-                                    <td colspan="6" class="no-results">No bookings found.</td>
-                                </tr>
-                            <?php endif; ?>
-
-                            <?php foreach ($bookings as $b): ?>
-                                <tr>
-                                    <td><?= htmlspecialchars($b['name']) ?></td>
-
-                                    <td><?= date("M d, Y", strtotime($b['reservation_date'])) ?></td>
-
-                                    <td>
-                                        <?= date("h:i A", strtotime($b['start_time'])) ?>
-                                        -
-                                        <?= date("h:i A", strtotime($b['end_time'])) ?>
-                                    </td>
-
-                                    <td><?= $b['type'] === 'Study' ? "Study Room" : "Gathering Room" ?></td>
-
-                                    <td>
-                                        <p class="status-pill <?= $b['status'] ?>">
-                                            <?= ucfirst($b['status']) ?>
-                                        </p>
-                                    </td>
-
-                                    <td class="actions-td">
-                                        <!-- VIEW (optional modal later) -->
-                                        <button class="btn-view">View</button>
-
-                                        <!-- CONFIRM -->
-                                        <?php if ($b['status'] === "pending"): ?>
-                                            <form method="POST" style="display:inline;">
-                                                <input type="hidden" name="booking_id" value="<?= $b['id'] ?>">
-                                                <input type="hidden" name="action" value="confirm">
-                                                <button class="btn-confirm">Confirm</button>
-                                            </form>
-                                        <?php endif; ?>
-
-                                        <!-- CANCEL -->
-                                        <?php if ($b['status'] !== "cancelled"): ?>
-                                            <form method="POST" style="display:inline;">
-                                                <input type="hidden" name="booking_id" value="<?= $b['id'] ?>">
-                                                <input type="hidden" name="action" value="cancel">
-                                                <button class="btn-cancel">Cancel</button>
-                                            </form>
-                                        <?php endif; ?>
-
-                                        <!-- REVERT BUTTON for confirmed or cancelled -->
-                                        <?php if ($b['status'] === "confirmed" || $b['status'] === "cancelled"): ?>
-                                            <form method="POST" style="display:inline;">
-                                                <input type="hidden" name="booking_id" value="<?= $b['id'] ?>">
-                                                <input type="hidden" name="action" value="revert">
-                                                <button class="btn-revert">Revert</button>
-                                            </form>
-                                        <?php endif; ?>
-                                    </td>
-
-
-                                </tr>
-                            <?php endforeach; ?>
+                        <tbody id="booking-table-body">
+                            <!-- Existing rows will be dynamically replaced by JS -->
                         </tbody>
 
                     </table>
@@ -236,3 +192,76 @@ $bookings = $manager->getBookings($search, $status, $dateFilter);
 </body>
 
 </html>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const searchInput = document.getElementById("searchBooking");
+        const statusFilter = document.getElementById("filterStatus");
+        const dateFilter = document.getElementById("filterDate");
+        const tableBody = document.getElementById("booking-table-body");
+
+        const fetchBookings = () => {
+            const search = searchInput.value;
+            const status = statusFilter.value;
+            const date = dateFilter.value;
+
+            const params = new URLSearchParams({
+                ajax: 1,
+                search,
+                status,
+                date
+            });
+            fetch("admin_booking.php?" + params.toString())
+                .then(res => res.json())
+                .then(data => {
+                    tableBody.innerHTML = "";
+
+                    if (data.length === 0) {
+                        tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;">No bookings found.</td></tr>`;
+                        return;
+                    }
+
+                    data.forEach(b => {
+                        const statusClass = b.status === "pending" ? "pending" : (b.status === "confirmed" ? "confirmed" : "cancelled");
+
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                        <td>${b.name}</td>
+                        <td>${new Date(b.reservation_date).toLocaleDateString()}</td>
+                        <td>${b.start_time} - ${b.end_time}</td>
+                        <td>${b.type}</td>
+                        <td><p class="status-pill ${statusClass}">${b.status.charAt(0).toUpperCase() + b.status.slice(1)}</p></td>
+                        <td class="actions-td">
+                            <button class="btn-view">View</button>
+                            ${b.status === "pending" ? `<form method="POST" style="display:inline;">
+                                <input type="hidden" name="booking_id" value="${b.id}">
+                                <input type="hidden" name="action" value="confirm">
+                                <button class="btn-confirm">Confirm</button>
+                            </form>` : ""}
+                            ${b.status !== "cancelled" ? `<form method="POST" style="display:inline;">
+                                <input type="hidden" name="booking_id" value="${b.id}">
+                                <input type="hidden" name="action" value="cancel">
+                                <button class="btn-cancel">Cancel</button>
+                            </form>` : ""}
+                            ${(b.status === "confirmed" || b.status === "cancelled") ? `<form method="POST" style="display:inline;">
+                                <input type="hidden" name="booking_id" value="${b.id}">
+                                <input type="hidden" name="action" value="revert">
+                                <button class="btn-revert">Revert</button>
+                            </form>` : ""}
+                        </td>
+                    `;
+                        tableBody.appendChild(row);
+                    });
+                });
+        };
+
+        // Event listeners
+        searchInput.addEventListener("input", fetchBookings);
+        statusFilter.addEventListener("change", fetchBookings);
+        dateFilter.addEventListener("change", fetchBookings);
+
+        // Load bookings initially
+        fetchBookings();
+    });
+</script>

@@ -34,12 +34,12 @@ body {
   --dashboard-card1-bg-color: #263d89;
 
   /* Admin Dashboard Styles */
-  --dashboard-card1-bg-color: #415cb5;
-  --dashboard-card2-bg-color: #5f35a8;
-  --dashboard-card3-bg-color: #a6337d;
-  --dashboard-card4-bg-color: #a13535;
-  --dashboard-card5-bg-color: #29935e;
-  --dashboard-card6-bg-color: #ad5e18;
+  --dashboard-card1-bg-color: #8896CE;
+  --dashboard-card2-bg-color: #8860CD;
+  --dashboard-card3-bg-color: #c54498bb;
+  --dashboard-card4-bg-color: #c44f4fcb;
+  --dashboard-card5-bg-color: #30ab6eb1;
+  --dashboard-card6-bg-color: #db7821da;
 
   /* Admin Booking Styles */
   --booking-table-btn1-bg-color: #efac4f;
@@ -98,13 +98,13 @@ body.dark-mode {
 /* MAIN CONTENT */
 .main-content {
   flex: 1;
-  padding: 30px;
+  padding: 0;
 }
 
 /* SIDEBAR */
 .sidebar {
   width: 260px;
-  background: var(--sidebar-bg);
+  background: var(--card-color);
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -172,6 +172,7 @@ body.dark-mode {
 .admin-header {
   display: flex;
   justify-content: space-between;
+  flex-direction: row;
   align-items: center;
   padding-bottom: 15px;
   margin-bottom: 25px;
@@ -179,6 +180,10 @@ body.dark-mode {
   flex-wrap: wrap; /* Allow stacking on mobile */
   gap: 15px;
   color: var(--text-color);
+  background: var(--card-color);
+  padding: 15px;
+  box-shadow: 0 2px 1px var(--shadow-color);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* Left side: title + subtitle */
@@ -188,7 +193,7 @@ body.dark-mode {
 }
 
 .header-left p {
-  margin: 3px 0 0;
+  margin: 1px 0 0;
   opacity: 0.7;
 }
 

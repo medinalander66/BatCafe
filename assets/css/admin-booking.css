@@ -89,6 +89,8 @@
   font-size: 13px;
   font-weight: 600;
   text-transform: capitalize;
+    text-align: center;
+
 }
 
 .status-pill.pending {
@@ -134,11 +136,6 @@
 .btn-revert {
   background: var(--booking-table-btn1-bg-color);
   color: var(--text-color);
-}
-
-.status-pill.status-pill {
-  max-width: 80px;
-  text-align: center;
 }
 
 .actions-td button:hover {

@@ -78,48 +78,48 @@
 
                 <div class="card" id="card-total-bookings">
                     <div class="card-info">
-                        <h3>Total Bookings</h3>
-                        <p>Overall reservations</p>
+                        <p>Total Bookings</p>
+                        <h2 class="card-h2" id="card-total-bks-h2">5</h2>
                     </div>
                     <i class="fa-solid fa-calendar card-icon"></i>
                 </div>
 
                 <div class="card" id="card-upcoming-bookings">
                     <div class="card-info">
-                        <h3>Upcoming Bookings</h3>
-                        <p>Future reservations</p>
+                        <p>Upcoming Bookings</p>
+                        <h2 class="card-h2" id="card-upcoming-bks-h2" >5</h2>
                     </div>
                     <i class="fa-solid fa-clock card-icon"></i>
                 </div>
 
                 <div class="card" id="card-total-revenue">
                     <div class="card-info">
-                        <h3>Total Revenue</h3>
-                        <p>Overall earnings</p>
+                        <p>Total Revenue</p>
+                        <h2 class="card-h2" id="card-total-rve-h2">5</h2>
                     </div>
                     <i class="fa-solid fa-peso-sign card-icon"></i>
                 </div>
 
                 <div class="card" id="card-todays-bookings">
                     <div class="card-info">
-                        <h3>Today's Bookings</h3>
-                        <p>Reservations today</p>
+                        <p>Today's Bookings</p>
+                        <h2 class="card-h2" id="card-todays-bks-h2">5</h2>
                     </div>
                     <i class="fa-solid fa-calendar-day card-icon"></i>
                 </div>
 
                 <div class="card" id="card-most-pplr-room">
                     <div class="card-info">
-                        <h3>Most Popular Room Type</h3>
-                        <p>Top demanded room</p>
+                        <p>Most Popular Room Type</p>
+                        <h2 class="card-h2" id="card-total-ppl-h2">5</h2>
                     </div>
                     <i class="fa-solid fa-star card-icon"></i>
                 </div>
 
                 <div class="card" id="card-equipment-revenue">
                     <div class="card-info">
-                        <h3>Equipment Revenue</h3>
-                        <p>Add-on earnings</p>
+                        <p>Equipment Revenue</p>
+                        <h2 class="card-h2" id="card-equipment-rve-h2">5</h2>
                     </div>
                     <i class="fa-solid fa-plug card-icon"></i>
                 </div>
