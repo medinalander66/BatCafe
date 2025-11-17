@@ -444,11 +444,14 @@ body.no-transition * {
   padding: 40px 60px;
   border-top: 2px solid var(--border-color);
   gap: 40px;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 .footer p {
   color: var(--footer-text-color);
   font-size: 0.95rem;
+    transition: background-color 0.4s ease, color 0.4s ease;
+
 }
 
 .footer-column {
@@ -472,6 +475,8 @@ body.no-transition * {
   font-size: 1.1rem;
   color: var(--text-color);
   margin-bottom: 10px;
+    transition: background-color 0.4s ease, color 0.4s ease;
+
 }
 
 .footer-desc {
@@ -508,16 +513,20 @@ body.no-transition * {
   margin-bottom: 10px;
 }
 
-.social-links img {
+.social-links i {
   width: 28px;
   height: 28px;
   transition: transform 0.2s ease;
   padding: 5px;
   background: var(--bg-color);
   border-radius: 5px;
+  transition: background-color 0.4s ease, color 0.4s ease;
+  text-align: center;
+  color: var(--accent-color);
+  box-shadow: 3px 3px var(--shadow-color);
 }
 
-.social-links img:hover {
+.social-links i:hover {
   transform: scale(1.15);
 }
 
@@ -532,6 +541,8 @@ body.no-transition * {
 
 .owner-info .icon {
   font-size: 1.1rem;
+  color: var(--accent2-color);
+  
 }
 
 /* ---------- Responsive for footer mobile ---------- */

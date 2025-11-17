@@ -88,12 +88,12 @@ if (isset($_POST['action'])) {
 // AJAX request to fetch filtered bookings
 if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
     header('Content-Type: application/json');
-    $filters = [
+    $filters['status'] = [
         'search' => $_GET['search'] ?? '',
         'status' => $_GET['status'] ?? 'all',
         'date' => $_GET['date'] ?? 'all'
     ];
-    $bookings = $manager->getAllBookings($filters);
+    $bookings = $manager->getAllBookings($filters['status']);
     echo json_encode($bookings);
     exit;
 }
@@ -102,13 +102,13 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
 /* ============================================
    FETCH BOOKINGS WITH FILTERS
 ============================================ */
-$filters = [
+$filters['status'] = [
     'search' => $_GET['search'] ?? '',
     'status' => $_GET['status'] ?? 'all',
     'date'   => $_GET['date'] ?? 'all'
 ];
 
-$bookings = $manager->getAllBookings($filters);
+$bookings = $manager->getAllBookings($filters['status']);
 
 ?>
 <!DOCTYPE html>
@@ -165,17 +165,17 @@ $bookings = $manager->getAllBookings($filters);
                         <input type="text" id="searchBooking" placeholder="Search by name, date, or room...">
 
                         <select id="filterStatus" name="status">
-                            <option value="all" <?= $filters === "all" ? "selected" : "" ?>>All Status</option>
-                            <option value="pending" <?= $filters === "pending" ? "selected" : "" ?>>Pending</option>
-                            <option value="confirmed" <?= $filters === "confirmed" ? "selected" : "" ?>>Confirmed</option>
-                            <option value="cancelled" <?= $filters === "cancelled" ? "selected" : "" ?>>Cancelled</option>
+                            <option value="all" <?= $filters['status'] === "all" ? "selected" : "" ?>>All Status</option>
+                            <option value="pending" <?= $filters['status'] === "pending" ? "selected" : "" ?>>Pending</option>
+                            <option value="confirmed" <?= $filters['status'] === "confirmed" ? "selected" : "" ?>>Confirmed</option>
+                            <option value="cancelled" <?= $filters['status'] === "cancelled" ? "selected" : "" ?>>Cancelled</option>
                         </select>
 
                         <select id="filterDate" name="date">
-                            <option value="all" <?= $filters === "all" ? "selected" : "" ?>>All Dates</option>
-                            <option value="today" <?= $filters === "today" ? "selected" : "" ?>>Today</option>
-                            <option value="upcoming" <?= $filters === "upcoming" ? "selected" : "" ?>>Upcoming</option>
-                            <option value="past" <?= $filters === "past" ? "selected" : "" ?>>Past</option>
+                            <option value="all" <?= $filters['status'] === "all" ? "selected" : "" ?>>All Dates</option>
+                            <option value="today" <?= $filters['status'] === "today" ? "selected" : "" ?>>Today</option>
+                            <option value="upcoming" <?= $filters['status'] === "upcoming" ? "selected" : "" ?>>Upcoming</option>
+                            <option value="past" <?= $filters['status'] === "past" ? "selected" : "" ?>>Past</option>
                         </select>
 
                     </form>

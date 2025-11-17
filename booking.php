@@ -238,7 +238,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
   <script src="assets/js/script.js" ></script>
   <link rel="stylesheet" href="assets/css/globalStyles.css">
   <link rel="stylesheet" href="assets/css/booking.css">
-
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" as="style"
+          onload="this.onload=null;this.rel='stylesheet'">
 </head>
 <body>
 

@@ -38,12 +38,13 @@
   align-items: center;
   gap: 10rem;
   padding: 2rem 1.5rem;
+    transition: background-color 0.4s ease, color 0.4s ease;
+
 }
 
 .menu-section {
   width: 100%;
   max-width: 1920px;
-
 }
 
 .menu-category {
@@ -74,6 +75,8 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   padding: 15px;
   background: var(--card-color);
+    transition: background-color 0.4s ease, color 0.4s ease;
+
 }
 
 .img-wrapper {
@@ -101,7 +104,21 @@
   color: var(--text-color);
   font-weight: 600;
   font-size: 0.9rem;
+    transition: background-color 0.4s ease, color 0.4s ease;
+
 }
+
+.blur-load {
+  filter: blur(20px);
+  opacity: 0.6;
+  transition: filter 0.5s ease, opacity 0.5s ease;
+}
+
+.blur-load.loaded {
+  filter: blur(0);
+  opacity: 1;
+}
+
 
 .menu-card:hover {
   transform: translateY(-5px);

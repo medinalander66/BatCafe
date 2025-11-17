@@ -51,7 +51,7 @@ body {
 
 html.dark-mode,
 body.dark-mode {
-  --bg-color: #181306;
+  --bg-color: #1c1708;
   --text-color: #f1f1f1;
   --card-color: #3a2c13;
   --accent-color: #ab8b4f;

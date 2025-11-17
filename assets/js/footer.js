@@ -34,13 +34,14 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="footer-column">
         <h4>Connect with Us</h4>
         <div class="social-links">
-          <a href="#"><img src="assets/images/icons/facebook-social.png" alt="Facebook"></a>
-          <a href="#"><img src="assets/images/icons/instagram-social.png" alt="Instagram"></a>
-          <a href="#"><img src="assets/images/icons/twitter-social.png" alt="Twitter"></a>
+          <a href="#"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#"><i class="fa-brands fa-facebook-messenger"></i></a>
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-tiktok"></i></a>
         </div>
         <div class="owner-info">
-          <p><span class="icon">📍</span>Location: Near BSU Malvar Campus</p>
-          <p><span class="icon">🚹</span>Owner: Nina Sy</p>
+          <p><span class="icon"><i class="fa-solid fa-location-dot"></i></i></span>Location: Near BSU Malvar Campus</p>
+          <p><span class="icon"><i class="fa-solid fa-user"></i></i></span>Owner: Niña Sy</p>
         </div>
       </div>
     </footer>

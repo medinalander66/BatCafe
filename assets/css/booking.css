@@ -89,6 +89,7 @@ select {
   transition: border 0.2s ease, box-shadow 0.2s ease;
   width: 100%;
   box-sizing: border-box;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 input:focus,
@@ -116,6 +117,8 @@ select:focus {
   font-weight: 500;
   cursor: pointer;
   transition: background 0.3s;
+    transition: background-color 0.4s ease, color 0.4s ease;
+
 }
 
 .adjust-btn:hover {
@@ -151,6 +154,7 @@ select:focus {
   justify-content: space-between;
   gap: 25px;
   margin-top: 1.5rem;
+  
 }
 
 .equipment-wrapper label {
@@ -179,6 +183,8 @@ select:focus {
   cursor: pointer;
   text-align: left;
   gap: 0.8rem; /* spacing between icon, text, and price */
+    transition: background-color 0.4s ease, color 0.4s ease;
+
 }
 
 .equipment-btn.selected {
