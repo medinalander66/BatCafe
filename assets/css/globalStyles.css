@@ -73,16 +73,24 @@ body {
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
+  overflow-x: hidden;
   
 }
 
 body {
+  display: flex;
+  flex-direction: column;
   font-family: "Poppins", "Segoe UI", sans-serif;
   background: var(--bg-color);
   color: var(--text-color);
   transition: background-color 0.4s ease, color 0.4s ease;
   line-height: 1.6;
 }
+main{
+  flex: 1;
+}
+
+
 
 body::before,
 body::after {

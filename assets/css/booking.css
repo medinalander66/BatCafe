@@ -1,8 +1,10 @@
 
 /* ---------- Container ---------- */
 .booking-container {
+  display: flex;
+  margin: auto 0px 10em;
+  justify-self:center;
   max-width: 900px;
-  margin: 5em auto 10em auto;
   padding: 26px;
   background: var(--card-color);
   box-shadow: 0px 1px 4px rgb(255 255 255 / 10%);
@@ -140,7 +142,7 @@ select:focus {
 .reservation-date-wrapper input,
 .reservation-date-wrapper select {
   flex: 1;
-  min-width: 80px;
+  min-width: 50px;
   padding: 8px 10px;
   border-radius: 6px;
   border: 1px solid #ccc;
@@ -154,11 +156,8 @@ select:focus {
   justify-content: space-between;
   gap: 25px;
   margin-top: 1.5rem;
+  flex-direction: column;
   
-}
-
-.equipment-wrapper label {
-  text-align: center;
 }
 
 .equipment-wrapper label {
@@ -166,6 +165,13 @@ select:focus {
   font-weight: 600;
   margin-bottom: 0.3rem;
   color: var(--text-color);
+  text-align: center;
+}
+
+.column-equipment{
+  display: flex;
+  flex-direction: row;
+  gap: inherit;
 }
 
 .equipment-btn {

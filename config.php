@@ -1,0 +1,28 @@
+<?php
+// config.php
+declare(strict_types=1);
+
+return (object)[
+    // Database
+    'db' => (object)[
+        'host' => 'localhost',
+        'dbname' => 'batcavecafez',
+        'user' => 'root',
+        'pass' => '',
+        'charset' => 'utf8mb4',
+    ],
+    // Business rates and constants (centralized)
+    'rates' => (object)[
+        'base_hourly_rate' => 50.00,    // PHP
+        'minimum_fee'      => 75.00,
+        // equipment codes => per-hour fee
+        'equipment' => [
+            'PROJECTOR'   => 150.00,
+            'SPEAKER_MIKE'=> 150.00,
+        ],
+    ],
+    // Misc config
+    'site' => (object)[
+        'timezone' => 'Asia/Manila',
+    ],
+];

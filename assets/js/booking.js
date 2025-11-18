@@ -1,289 +1,291 @@
-const typeEl = document.getElementById('type');
-const timeEl = document.getElementById('start_time');
-const hoursEl = document.getElementById('hours');
-const personsEl = document.getElementById('persons');
-const remainingEl = document.getElementById('remaining-seats');
-const submitBtn = document.getElementById('submit-btn');
-// Date dropdowns
-const yearEl = document.getElementById('year');
-const monthEl = document.getElementById('month');
-const dayEl = document.getElementById('day');
-
-// Time slot adjustment buttons
-const increaseBtn = document.getElementById('increase-time');
-const decreaseBtn = document.getElementById('decrease-time');
-
-// Operating hours
-const MIN_HOUR = 13; // 1 PM
-const MAX_HOUR = 25; // 1 AM next day
-
-// ----------------------------
-// Helper: Get selected date in YYYY-MM-DD
-// ----------------------------
-function getSelectedDate() {
-    const year = yearEl.value;
-    const month = String(monthEl.value).padStart(2,'0');
-    const day = String(dayEl.value).padStart(2,'0');
-    return `${year}-${month}-${day}`;
-}
-
-
-const reservationDateInput = document.getElementById('reservation_date');
-
-function updateReservationDate() {
-    const year = yearEl.value;
-    const month = monthEl.value.padStart(2,'0');
-    const day = dayEl.value.padStart(2,'0');
-    document.getElementById('reservation_date').value = `${year}-${month}-${day}`;
-}
-
-// Call initially
-updateReservationDate();
-
-// Call on change
-[yearEl, monthEl, dayEl].forEach(el => el.addEventListener('change', updateReservationDate));
-
-
-
-
-
-// ----------------------------
-// Check remaining seats (AJAX)
-// ----------------------------
-function checkRemainingSeats() {
-    const remainingWrapper = document.querySelector('.remaining-seats-wrapper');
-
-    const date = getSelectedDate();
-    const time = timeEl.value;
-    const hours = parseFloat(hoursEl.value);
-
-    // Hide wrapper if inputs are incomplete
-    if (!date || !time || !hours) {
-        remainingWrapper.style.display = 'none';
-        submitBtn.disabled = false;
-        return;
-    }
-
-    // Study type
-    if (typeEl.value === 'Study') {
-        fetch(`booking.php?check_seats=1&date=${date}&time=${time}&hours=${hours}`)
-            .then(res => res.json())
-            .then(data => {
-                const remaining = 20 - parseInt(data.current_total, 10);
-                remainingWrapper.style.display = 'flex';
-                remainingEl.textContent =
-                    remaining > 0
-                        ? `Remaining Study seats: ${remaining}`
-                        : '❌ Study room full at this time';
-                remainingEl.style.color = remaining > 0 ? 'green' : 'red';
-                submitBtn.disabled = remaining <= 0;
-            })
-            .catch(err => console.error('AJAX error:', err));
-    }
-    // Gathering type
-    else if (typeEl.value === 'Gathering') {
-        fetch(`booking.php?check_gathering=1&date=${date}&time=${time}&hours=${hours}`)
-            .then(res => res.json())
-            .then(data => {
-                remainingWrapper.style.display = 'flex';
-                if (data.is_available) {
-                    remainingEl.textContent = `✅ The room is free to reserve for a Gathering at this date or time.`;
-                    remainingEl.style.color = 'green';
-                    submitBtn.disabled = false;
-                } else {
-                    remainingEl.textContent = ` Room already reserved for a Gathering at this date/time.`;
-                    remainingEl.style.color = 'red';
-                    submitBtn.disabled = true;
-                }
-            })
-            .catch(err => console.error('AJAX error:', err));
-    }
-}
-
-
-// Trigger when relevant inputs change
-[typeEl, timeEl, hoursEl, monthEl, dayEl].forEach(el => el.addEventListener('change', checkRemainingSeats));
-
-
-// ----------------------------
-// Time slot dynamic adjustment
-// ----------------------------
-function adjustTime(minutes) {
-    if (!timeEl.value) return;
-
-    let [hours, mins] = timeEl.value.split(':').map(Number);
-    let totalMinutes = hours * 60 + mins + minutes;
-
-    // Limit between 13:00 and 25:00 (1 AM next day)
-    if (totalMinutes < MIN_HOUR * 60) totalMinutes = MIN_HOUR * 60;
-    if (totalMinutes > MAX_HOUR * 60) totalMinutes = MAX_HOUR * 60;
-
-    let newHours = Math.floor(totalMinutes / 60);
-    let newMins = totalMinutes % 60;
-
-    // Wrap around after 24 hours
-    if (newHours >= 24) newHours -= 24;
-
-    timeEl.value = `${newHours.toString().padStart(2,'0')}:${newMins.toString().padStart(2,'0')}`;
-    
-    // ✅ Dynamically check remaining seats whenever time changes
-    checkRemainingSeats();
-}
-
-increaseBtn.addEventListener('click', () => adjustTime(30));
-decreaseBtn.addEventListener('click', () => adjustTime(-30));
-
-// ----------------------------
-// Populate date dropdowns (year/month/day) default to today
-// ----------------------------
-const today = new Date();
-const currentYear = today.getFullYear();
-const currentMonth = today.getMonth() + 1;
-const currentDay = today.getDate();
-
-// Year readonly
-yearEl.value = currentYear;
-
-// Populate month
-for (let m=1; m<=12; m++){
-    const option = document.createElement('option');
-    option.value = m;
-    option.textContent = new Date(currentYear,m-1).toLocaleString('default',{month:'long'});
-    monthEl.appendChild(option);
-}
-monthEl.value = currentMonth;
-
-// Populate days
-function populateDays(year, month){
-    const daysInMonth = new Date(year, month, 0).getDate();
-    dayEl.innerHTML = '';
-    for (let d=1; d<=daysInMonth; d++){
-        const option = document.createElement('option');
-        option.value = d;
-        option.textContent = d;
-        dayEl.appendChild(option);
-    }
-}
-populateDays(currentYear, currentMonth);
-dayEl.value = currentDay;
-
-// Update days when month changes
-monthEl.addEventListener('change', ()=>{
-    populateDays(currentYear, parseInt(monthEl.value));
-    if(dayEl.options.length < currentDay) dayEl.value = dayEl.options[0].value;
-});
-
-
-// Equipment toggle buttons
-const projectorBtn = document.getElementById('projector-btn');
-const speakerBtn = document.getElementById('speaker-btn');
-
-function toggleButton(btn) {
-    const isActive = btn.getAttribute('data-active') === '1';
-    btn.setAttribute('data-active', isActive ? '0' : '1');
-    btn.classList.toggle('active', !isActive);
-}
-
-// Click events
-projectorBtn.addEventListener('click', () => toggleButton(projectorBtn));
-speakerBtn.addEventListener('click', () => toggleButton(speakerBtn));
-
-
-
-// Toggle Buttons for Equipment Selection
+// assets/js/Booking.js
 document.addEventListener("DOMContentLoaded", function () {
+  // DOM refs
+  const form = document.getElementById("booking-form");
+  const calculateBtn = document.getElementById("calculate-btn");
+  const submitBtn = document.getElementById("submit-btn");
   const equipmentButtons = document.querySelectorAll(".equipment-btn");
-  const selectedInput = document.getElementById("selected_equipment");
+  const costWrapper = document.getElementById("cost-breakdown-wrapper");
+  const roomFeeVal = document.getElementById("room-fee-val");
+  const equipmentFeeVal = document.getElementById("equipment-fee-val");
+  const totalFeeVal = document.getElementById("total-fee-val");
+  // Elements
+  const startTimeInput = document.getElementById("start_time");
+  const increaseBtn = document.getElementById("increase-time");
+  const decreaseBtn = document.getElementById("decrease-time");
 
-  equipmentButtons.forEach(button => {
-    button.addEventListener("click", () => {
-      // Toggle active class
-      button.classList.toggle("active");
+  // date selects
+  const yearInput = document.getElementById("year");
+  const monthSelect = document.getElementById("month");
+  const daySelect = document.getElementById("day");
 
-      // Collect all selected equipment
-      const selected = Array.from(equipmentButtons)
-        .filter(btn => btn.classList.contains("active"))
-        .map(btn => btn.dataset.equipment);
+  // set year to current
+  const now = new Date();
+  yearInput.value = now.getFullYear();
 
-      // Store selected list as comma-separated string in hidden input
-      selectedInput.value = selected.join(", ");
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  months.forEach((month, index) => {
+    const option = document.createElement("option");
+    option.value = index + 1; // <-- integer submitted
+    option.textContent = month; // <-- text shown
+    monthSelect.appendChild(option);
+  });
+
+  // auto-select current month
+  monthSelect.value = new Date().getMonth() + 1;
+
+  // populate days helper
+  function populateDays() {
+    const now = new Date();
+    const y = parseInt(yearInput.value, 10);
+    const m = parseInt(monthSelect.value, 10);
+
+    const daysInMonth = new Date(y, m, 0).getDate();
+
+    daySelect.innerHTML = "";
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const opt = document.createElement("option");
+      opt.value = d;
+      opt.textContent = d;
+      daySelect.appendChild(opt);
+    }
+
+    // ---- auto-select current day if month/year match today ----
+    if (y === now.getFullYear() && m === now.getMonth() + 1) {
+      daySelect.value = now.getDate();
+    } else {
+      // fallback (optional)
+      daySelect.value = 1;
+    }
+  }
+  populateDays();
+  monthSelect.addEventListener("change", populateDays);
+
+  // Helper to add/subtract minutes with boundaries (13:00 → 01:00 next day)
+  flatpickr("#start_time", {
+    enableTime: true,
+    noCalendar: true,
+    time_24hr: false,
+    minuteIncrement: 30,
+    defaultDate: "13:00",
+    minTime: "13:00",
+    maxTime: "01:00", // flatpickr supports overnight
+    dateFormat: "h:i K",
+  });
+
+  increaseBtn.addEventListener("click", () =>
+    adjustFlatpickrTime(startTimeInput, 30)
+  );
+  decreaseBtn.addEventListener("click", () =>
+    adjustFlatpickrTime(startTimeInput, -30)
+  );
+
+  function adjustFlatpickrTime(input, minutes) {
+    const fp = input._flatpickr;
+    if (!fp) return;
+
+    let date = fp.selectedDates[0] || new Date();
+    date.setHours(date.getHours(), date.getMinutes() + minutes);
+
+    // Handle wrapping past max/min
+    const minTime = fp.parseDate(fp.config.minTime, "H:i");
+    const maxTime = fp.parseDate(fp.config.maxTime, "H:i");
+
+    if (date < minTime) date = maxTime;
+    if (date > maxTime) date = minTime;
+
+    fp.setDate(date, true); // update input and trigger change
+  }
+
+  // equipment selection set
+  const selectedEquipment = new Set();
+  equipmentButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const code = btn.dataset.code;
+      if (!code) return;
+      if (selectedEquipment.has(code)) {
+        selectedEquipment.delete(code);
+        btn.classList.remove("selected");
+      } else {
+        selectedEquipment.add(code);
+        btn.classList.add("selected");
+      }
     });
   });
+
+  // helper to gather form data
+  function gatherFormData() {
+    const hours = document.getElementById("hours").value;
+    const equipment = Array.from(selectedEquipment);
+    return {
+      type: document.getElementById("type").value,
+      persons: document.getElementById("persons").value,
+      start_time: document.getElementById("start_time").value,
+      year: document.getElementById("year").value,
+      month: document.getElementById("month").value,
+      day: document.getElementById("day").value,
+      hours: hours,
+      name: document.getElementById("name").value,
+      student_id: document.getElementById("student_id").value,
+      email: document.getElementById("email").value,
+      phone: document.getElementById("phone").value,
+      equipment: equipment,
+    };
+  }
+
+  // show estimate result
+  function showEstimate(data) {
+    costWrapper.style.display = "flex";
+    roomFeeVal.textContent = formatPHP(data.room_fee);
+    equipmentFeeVal.textContent = formatPHP(data.equipment_fee);
+    totalFeeVal.textContent = formatPHP(data.total);
+  }
+
+  function formatPHP(amount) {
+    return "₱" + Number(amount).toFixed(2);
+  }
+
+  // Calculate button - AJAX call to booking.php?action=calculate
+  calculateBtn.addEventListener("click", function () {
+    const fd = gatherFormData();
+    const body = new FormData();
+    body.append("action", "calculate");
+    body.append("hours", fd.hours);
+    // append equipment as multiple values
+    for (const code of fd.equipment) body.append("equipment[]", code);
+
+    fetch("booking.php", {
+      method: "POST",
+      body: body,
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          const err = await res.json().catch(() => null);
+          alert("Failed to calculate. " + (err?.message || res.statusText));
+          return;
+        }
+        const json = await res.json();
+        if (json.status === "ok") {
+          showEstimate(json.data);
+        } else {
+          alert("Error: " + JSON.stringify(json));
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Network error while calculating.");
+      });
+  });
+
+  // Reusable function to perform AJAX calculation
+  // === Reusable AJAX calculation function ===
+  // showWrapper = true if the calculate button was clicked
+  function calculateEstimate(showWrapper = false) {
+    const fd = gatherFormData();
+    const body = new FormData();
+    body.append("action", "calculate");
+    body.append("hours", fd.hours);
+    for (const code of fd.equipment) body.append("equipment[]", code);
+
+    fetch("booking.php", { method: "POST", body })
+      .then(async (res) => {
+        if (!res.ok) {
+          const err = await res.json().catch(() => null);
+          alert("Failed to calculate. " + (err?.message || res.statusText));
+          return;
+        }
+        const json = await res.json();
+        if (json.status === "ok") {
+          // Only show the wrapper if explicitly requested
+          if (showWrapper) costWrapper.style.display = "flex";
+
+          // Always update the numbers
+          roomFeeVal.textContent = formatPHP(json.data.room_fee);
+          equipmentFeeVal.textContent = formatPHP(json.data.equipment_fee);
+          totalFeeVal.textContent = formatPHP(json.data.total);
+        } else {
+          alert("Error: " + JSON.stringify(json));
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Network error while calculating.");
+      });
+  }
+
+  // === Button click triggers calculation and shows wrapper ===
+  calculateBtn.addEventListener("click", () => calculateEstimate(true));
+
+  // === Dynamic calculation on form changes, without showing wrapper ===
+  const formElements = document.querySelectorAll("input, select");
+  formElements.forEach((el) => {
+    el.addEventListener("input", () => calculateEstimate(false));
+    el.addEventListener("change", () => calculateEstimate(false));
+  });
+
+  // Submit reservation
+  submitBtn.addEventListener("click", function () {
+    const fd = gatherFormData();
+    const body = new FormData();
+    body.append("action", "submit");
+    body.append("type", fd.type);
+    body.append("persons", fd.persons);
+    body.append("start_time", fd.start_time);
+    body.append("year", fd.year);
+    body.append("month", fd.month);
+    body.append("day", fd.day);
+    body.append("hours", fd.hours);
+    body.append("name", fd.name);
+    body.append("student_id", fd.student_id);
+    body.append("email", fd.email);
+    body.append("phone", fd.phone);
+    for (const code of fd.equipment) body.append("equipment[]", code);
+
+    fetch("booking.php", {
+      method: "POST",
+      body: body,
+    })
+      .then(async (res) => {
+        const json = await res.json().catch(() => null);
+        if (!res.ok) {
+          if (json && json.errors) {
+            alert("Validation errors: " + JSON.stringify(json.errors));
+          } else {
+            alert("Submit failed: " + res.statusText);
+          }
+          return;
+        }
+        if (json.status === "ok") {
+          alert(
+            "Reservation created! ID: " +
+              json.data.reservation_id +
+              "\nEstimated total: ₱" +
+              json.data.estimated_total
+          );
+          // optionally redirect or clear form
+          window.location.reload();
+        } else {
+          alert("Error: " + JSON.stringify(json));
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Network error while submitting reservation.");
+      });
+  });
 });
-
-
-// ----------------------------
-// Cost Calculation
-// ----------------------------
-const calculateBtn = document.getElementById('calculate-btn');
-const costWrapper = document.getElementById('cost-breakdown-wrapper');
-
-const roomFeeEl = document.getElementById('room-fee-val');
-const equipmentFeeEl = document.getElementById('equipment-fee-val');
-const totalFeeEl = document.getElementById('total-fee-val');
-
-
-const BASE_RATE = 50; // Room per hour
-const EQUIPMENT_RATE = 150; // Each equipment per hour
-
-let projectorSelected = false;
-let speakerSelected = false;
-
-// Toggle equipment selection
-projectorBtn.addEventListener('click', () => {
-    projectorSelected = !projectorSelected;
-    projectorBtn.classList.toggle('selected', projectorSelected);
-});
-
-speakerBtn.addEventListener('click', () => {
-    speakerSelected = !speakerSelected;
-    speakerBtn.classList.toggle('selected', speakerSelected);
-});
-
-// Update cost dynamically
-function updateCostBreakdown() {
-    const hours = parseFloat(hoursEl.value) || 0;
-    const type = typeEl.value;
-
-    // Room fee only applies to Study or Gathering rooms
-    const roomFee = (type === 'Study' || type === 'Gathering') ? BASE_RATE * hours : 0;
-    const equipmentFee = ((projectorSelected ? EQUIPMENT_RATE : 0) + (speakerSelected ? EQUIPMENT_RATE : 0)) * hours;
-    const totalFee = roomFee + equipmentFee;
-
-    roomFeeEl.textContent = `₱${roomFee.toFixed(2)}`;
-    equipmentFeeEl.textContent = `₱${equipmentFee.toFixed(2)}`;
-    totalFeeEl.textContent = `₱${totalFee.toFixed(2)}`;
-
-    costWrapper.style.display = hours > 0 ? 'flex' : 'none';
-}
-
-// Trigger dynamic calculation on relevant inputs
-[hoursEl, typeEl].forEach(el => el.addEventListener('change', updateCostBreakdown));
-
-
-calculateBtn.addEventListener('click', updateCostBreakdown);
-
-let costVisible = false; // Track visibility
-
-calculateBtn.addEventListener('click', () => {
-    costVisible = !costVisible; // Toggle state
-
-    if (costVisible) {
-        updateCostBreakdown();          // Update values
-        costWrapper.style.display = 'flex'; // Show
-        calculateBtn.textContent = 'Hide';
-    } else {
-        costWrapper.style.display = 'none'; // Hide
-        calculateBtn.textContent = 'Calculate Total';
-    }
-});
-
-// Ensure dynamic updates still happen on input changes
-[hoursEl, typeEl].forEach(el => el.addEventListener('change', () => {
-    if (costVisible) updateCostBreakdown(); // Only update if visible
-}));
-[projectorBtn, speakerBtn].forEach(el => el.addEventListener('click', () => {
-    if (costVisible) updateCostBreakdown(); // Update if visible
-}));
-
-
