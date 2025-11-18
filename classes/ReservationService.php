@@ -107,39 +107,7 @@ class ReservationService
                 $user_id = (int)$this->pdo->lastInsertId();
             }
 
-            // Validate start_time server-side
-            if (!empty($input['start_time'])) {
-                $startTime = $input['start_time']; // format HH:MM
-
-                // Split into hours and minutes
-                [$hours, $minutes] = explode(':', $startTime);
-                $hours = (int)$hours;
-                $minutes = (int)$minutes;
-
-                // Convert to total minutes since 00:00
-                $totalMinutes = $hours * 60 + $minutes;
-
-                // Define allowed range in minutes: 13:00 → 01:00 next day
-                $minMinutes = 13 * 60;  // 13:00 => 780 minutes
-                $maxMinutes = 25 * 60;  // 01:00 next day => 25:00 => 1500 minutes
-
-                // Adjust times after midnight by adding 24 hours (if needed)
-                if ($totalMinutes < $minMinutes) {
-                    $totalMinutes += 24 * 60; // add 1440 minutes
-                }
-
-                if ($totalMinutes < $minMinutes || $totalMinutes > $maxMinutes) {
-                    $errors['start_time'] = 'Start time must be between 13:00 and 01:00.';
-                }
-            } else {
-                $errors['start_time'] = 'Start time is required';
-            }
-
-            // Throw validation exception if any errors
-            if (!empty($errors)) throw new ValidationException($errors);
-
-
-            // insert reservation
+            // insert reservation (status -> PENDING)
             $base_rate = (float) $this->config->rates->base_hourly_rate;
             $minimum_fee = (float) $this->config->rates->minimum_fee;
             $insertRes = $this->pdo->prepare(
