@@ -21,7 +21,7 @@
     #a37d30 40%,
     #daa95a 100%
   );
-  --button-selected-bg: #206222;
+  --button-selected-bg: #a16c1d;
   --shadow-color: rgba(0, 0, 0, 0.08);
   --text-color-accent: #6b4e1a;
   --scale-button-hover: scale(1.03);
@@ -54,7 +54,7 @@ body.dark-mode {
     brightness(100%) contrast(100%);
   --hover2-color: #9f7019;
   --border-color: #524e4e;
-  --button-selected-bg: #2a7d2d;
+  --button-selected-bg: #a16c1d;
   --shadow-color: rgba(5, 5, 5, 0.085);
   --text-color-accent: #daa239;
   --filter-invert-hover-accent-color: invert(40%) sepia(80%) saturate(600%)

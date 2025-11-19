@@ -8,11 +8,19 @@ date_default_timezone_set('Asia/Manila');
 $config = require __DIR__ . '/config.php';
 
 /*
- * Autoload classes from src/
+ * Autoload classes from classes/ or src/
  */
 spl_autoload_register(function ($class) {
-  $file = __DIR__ . '/classes/' . $class . '.php';
-  if (file_exists($file)) require $file;
+  $paths = [
+    __DIR__ . '/classes/' . $class . '.php',
+    __DIR__ . '/src/' . $class . '.php',
+  ];
+  foreach ($paths as $file) {
+    if (file_exists($file)) {
+      require $file;
+      return;
+    }
+  }
 });
 
 /* === Bootstrap DB connection === */
@@ -31,9 +39,12 @@ try {
 
 /* === Instantiate repository/service objects === */
 $EquipmentRepo = new EquipmentRepository($pdo);
-$ReservationService = new ReservationService($pdo, $config, $EquipmentRepo);
+$ReservationService = new ReservationService($pdo, $EquipmentRepo);
 
-/* get equipment list for UI rendering (safe after repo instantiation) */
+/* load room types and equipment for rendering */
+$roomTypesStmt = $pdo->query("SELECT id, code, name, rate_per_hour FROM room_types ORDER BY id");
+$roomTypes = $roomTypesStmt->fetchAll(PDO::FETCH_ASSOC);
+
 $equipments = $EquipmentRepo->all();
 
 /* === Route AJAX actions (POST) === */
@@ -44,26 +55,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
 
   try {
     if ($action === 'calculate') {
-      // Collect fields needed for calculation
-      $payload = [
+      $equipment_codes = [];
+      if (!empty($_POST['equipment_codes']) && is_array($_POST['equipment_codes'])) {
+        $equipment_codes = $_POST['equipment_codes'];
+      } elseif (!empty($_POST['equipment']) && is_array($_POST['equipment'])) {
+        $equipment_codes = $_POST['equipment'];
+      }
+
+      $estimate = $ReservationService->calculateEstimate([
         'hours' => (float) ($_POST['hours'] ?? 0),
-        'equipment' => $_POST['equipment'] ?? [], // array of equipment codes -> quantities or codes
-      ];
-      // normalize equipment - expect array of codes => quantity (or array of codes)
-      // Our front-end sends codes array (selected equipment codes).
-      $result = $ReservationService->calculateEstimate([
-        'hours' => $payload['hours'],
-        'equipment_codes' => (array) $payload['equipment']
+        'persons' => (int) ($_POST['persons'] ?? 1),
+        'room_type_id' => (int) ($_POST['room_type_id'] ?? 0),
+        'equipment_codes' => $equipment_codes,
       ]);
-      echo json_encode(['status' => 'ok', 'data' => $result]);
+
+      echo json_encode([
+        'status' => 'ok',
+        'data' => [
+          'hourly_fee' => $estimate['hourly_fee'],
+          'person_fee' => $estimate['person_fee'],
+          'equipment_fee' => $estimate['equipment_fee'],
+          'minimum_fee' => $estimate['minimum_fee'],
+          'total_fee' => $estimate['total_fee']
+        ]
+      ]);
       exit;
     }
 
-
     if ($action === 'submit') {
-      // Extract and validate input fields
+      // Build input for createReservation
       $input = [
-        'type' => trim($_POST['type'] ?? ''),
+        'room_type_id' => (int) ($_POST['room_type_id'] ?? 0),
         'persons' => (int) ($_POST['persons'] ?? 1),
         'start_time' => trim($_POST['start_time'] ?? ''),
         'year' => (int) ($_POST['year'] ?? 0),
@@ -74,14 +96,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
         'student_id' => trim($_POST['student_id'] ?? ''),
         'email' => trim($_POST['email'] ?? ''),
         'phone' => trim($_POST['phone'] ?? ''),
-        'equipment' => (array) ($_POST['equipment'] ?? []), // array of equipment codes
+        // equipment[] optional
+        'equipment' => is_array($_POST['equipment']) ? $_POST['equipment'] : (is_array($_POST['equipment_codes']) ? $_POST['equipment_codes'] : []),
       ];
 
       $createResult = $ReservationService->createReservation($input);
+
       echo json_encode(['status' => 'ok', 'data' => $createResult]);
       exit;
     }
-    
+
     throw new RuntimeException('Unknown action');
   } catch (ValidationException $ve) {
     http_response_code(422);
@@ -95,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
 }
 
 /* === GET: render booking form (the HTML you supplied, slightly embedded) === */
-/* get equipment list for UI buttons */
+
 $message = $_SESSION['message'] ?? '';
 unset($_SESSION['message']);
 ?>
@@ -136,10 +160,10 @@ unset($_SESSION['message']);
         <input type="hidden" name="action" value="">
         <div class="two-column-form">
           <label for="type">Room Type *</label>
-          <select name="type" id="type" required>
-            <option value="Study" selected>Study</option>
-            <option value="Gathering">Gathering</option>
-            <option value="Event">Event</option>
+          <select name="room_type_id" id="room_type" required>
+            <?php foreach ($roomTypes as $rt): ?>
+              <option value="<?= (int)$rt['id'] ?>"><?= htmlspecialchars($rt['name']) ?> (₱<?= number_format((float)$rt['rate_per_hour'], 2) ?>/hr)</option>
+            <?php endforeach; ?>
           </select>
           <!-- ===== Column 1 ===== -->
           <div class="column">
@@ -202,7 +226,7 @@ unset($_SESSION['message']);
           <label>Rental Equipment (Optional):</label>
           <div class="column-equipment">
             <?php
-            // Map equipment codes to  icons
+            // Map equipment codes to icons
             $equipmentIcons = [
               'PROJECTOR'   => 'assets/images/icons/projector-white.png',
               'SPEAKER_MIKE' => 'assets/images/icons/microphone-white.png',
@@ -212,15 +236,16 @@ unset($_SESSION['message']);
 
             <?php foreach ($equipments as $eq): ?>
               <?php
-              $iconSrc = $equipmentIcons[$eq['code']] ?? 'fa-solid fa-box'; // default icon if not found
+              $iconSrc = $equipmentIcons[$eq['code']] ?? null;
               ?>
-              <button type="button" class="equipment-btn" data-code="<?= htmlspecialchars($eq['code']) ?>">
-                <span class="icon"><img src="<?= $iconSrc ?>"></img></span>
-                <?= htmlspecialchars($eq['name']) ?>
-                <span class="price">
-                  ₱<?= number_format((float)$eq['rate_per_hour'], 2) ?>/hr
+              <label class="equipment-label">
+                <input type="checkbox" hidden name="equipment[]" value="<?= htmlspecialchars($eq['code']) ?>">
+                <span class="equipment-btn" data-code="<?= htmlspecialchars($eq['code']) ?>">
+                  <span class="icon"><?php if ($iconSrc): ?><img src="<?= $iconSrc ?>" alt="icon"><?php endif; ?></span>
+                  <?= htmlspecialchars($eq['name']) ?>
+                  <span class="price">₱<?= number_format((float)$eq['rate_per_hour'], 2) ?>/hr</span>
                 </span>
-              </button>
+              </label>
             <?php endforeach; ?>
           </div>
         </div>
@@ -237,12 +262,14 @@ unset($_SESSION['message']);
             <div class="cost-breakdown-column">
               <h3>Cost Breakdown</h3>
               <p>Room Fee (per hour)</p>
+              <p>Person Fee</p>
               <p>Equipment Fee</p>
               <hr>
               <p id="total-estimated-cost-p">Total Estimated Cost</p>
             </div>
             <div class="cost-breakdown-column numbers-column">
               <p id="room-fee-val">₱0.00</p>
+              <p id="person-fee-val">₱0.00</p>
               <p id="equipment-fee-val">₱0.00</p>
               <hr>
               <p id="total-fee-val">₱0.00</p>
