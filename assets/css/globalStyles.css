@@ -226,6 +226,8 @@ body.no-transition * {
 .mobile-theme {
   margin-top: auto;
   display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
   justify-content: center;
 }
 
@@ -300,6 +302,9 @@ body.no-transition * {
 .theme-toggle .sun {
   display: none;
 }
+.hamburger .light-menu{
+  display: none;
+}
 /* 🌞 Sun Hover Accent Effect */
 .theme-toggle .sun img,
 .theme-toggle .moon img {
@@ -321,11 +326,26 @@ body.no-transition * {
   display: inline-flex;
 }
 
+/* Dark Mode – show sun, hide moon */
+.dark-mode .hamburger .light-menu {
+  display: inline-flex;
+}
+
+
 .dark-mode .theme-toggle .moon {
   display: none;
 }
 
+
+.dark-mode .hamburger .dark-menu {
+  display: none;
+}
+
 .theme-toggle .moon {
+  display: flex;
+}
+
+.hamburger.moon {
   display: flex;
 }
 
@@ -375,8 +395,9 @@ body.no-transition * {
     font-size: 0.7rem;
   }
 
-  .theme-toggle {
+  #theme-toggle-mobile {
     font-size: 1.1rem;
+    display: flex;
   }
 }
 

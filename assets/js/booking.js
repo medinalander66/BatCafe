@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const personFeeVal = document.getElementById("person-fee-val");
   const equipmentFeeVal = document.getElementById("equipment-fee-val");
   const totalFeeVal = document.getElementById("total-fee-val");
+  const minimumFeeVal = document.getElementById("minimum-fee-val"); // new element for minimum fee
+
 
   const startTimeInput = document.getElementById("start_time");
   const increaseBtn = document.getElementById("increase-time");
@@ -102,6 +104,17 @@ document.addEventListener("DOMContentLoaded", function () {
     adjustFlatpickrTime(startTimeInput, -30)
   );
 
+  // Show cost wrapper and populate fees
+  function showCostWrapper(data) {
+    costWrapper.style.display = "flex";
+    roomFeeVal.textContent = "₱" + (data.hourly_fee ?? 0).toFixed(2);
+    personFeeVal.textContent = "₱" + (data.person_fee ?? 0).toFixed(2);
+    equipmentFeeVal.textContent = "₱" + (data.equipment_fee ?? 0).toFixed(2);
+    if (minimumFeeVal)
+      minimumFeeVal.textContent = "₱" + (data.minimum_fee ?? 0).toFixed(2);
+    totalFeeVal.textContent = "₱" + (data.total_fee ?? 0).toFixed(2);
+  }
+
   // Equipment selection
   // Equipment selection
   const selectedEquipment = new Set();
@@ -158,13 +171,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((res) => res.json())
       .then((json) => {
         if (json.status === "ok") {
-          const data = json.data;
-          if (showWrapper) costWrapper.style.display = "flex";
-          roomFeeVal.textContent = "₱" + (data.hourly_fee ?? 0).toFixed(2);
-          personFeeVal.textContent = "₱" + (data.person_fee ?? 0).toFixed(2);
-          equipmentFeeVal.textContent =
-            "₱" + (data.equipment_fee ?? 0).toFixed(2);
-          totalFeeVal.textContent = "₱" + (data.total_fee ?? 0).toFixed(2);
+          showCostWrapper(json.data);
         } else {
           alert("Error calculating estimate: " + JSON.stringify(json));
         }
@@ -174,6 +181,11 @@ document.addEventListener("DOMContentLoaded", function () {
         alert("Network error while calculating estimate.");
       });
   }
+
+    // Calculate button click
+  calculateBtn.addEventListener("click", () => {
+    calculateEstimate();
+  });
 
   // Dynamic calculation on input changes
   const formElements = document.querySelectorAll("input, select");

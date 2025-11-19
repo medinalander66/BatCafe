@@ -26,7 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
           </button>
 
           <button class="hamburger" id="hamburger">
-            <img src="assets/images/icons/burger-bar.png" alt="Menu">
+            <span class="dark-menu"><img src="/assets/images/icons/hamburger-dark.svg" alt="Menu"></span>
+            <span class="light-menu"><img src="/assets/images/icons/hamburger-light.svg" alt="Menu"></span>
           </button>
         </div>
       </nav>
@@ -55,8 +56,8 @@ document.addEventListener("DOMContentLoaded", () => {
           <ul class="mobile-links">${mobileLinksHTML}</ul>
           <div class="mobile-theme">
             <button class="theme-toggle" id="theme-toggle-mobile" aria-label="Toggle theme">
-              <span class="sun">☀️</span>
-              <span class="moon">🌙</span>
+            <span class="sun"><img src="/assets/images/icons/light.svg" alt="Light Mode"></span>
+            <span class="moon"><img src="/assets/images/icons/night.svg" alt="Dark Mode"></span>
             </button>
           </div>
         </div>
