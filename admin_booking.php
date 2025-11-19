@@ -194,14 +194,11 @@ $bookings = $manager->getAllBookings($filters['status']);
                                 <th id="th-actions">Actions</th>
                             </tr>
                         </thead>
-
                         <tbody id="booking-table-body">
                             <!-- Existing rows will be dynamically replaced by JS -->
                         </tbody>
-
                     </table>
                 </div>
-
             </section>
         </main>
     </div>

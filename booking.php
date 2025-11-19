@@ -7,9 +7,8 @@ date_default_timezone_set('Asia/Manila');
 
 $config = require __DIR__ . '/config.php';
 
-
 /*
- * Simple autoload (for this small example)
+ * Autoload classes from src/
  */
 spl_autoload_register(function ($class) {
   $file = __DIR__ . '/classes/' . $class . '.php';
@@ -30,12 +29,12 @@ try {
   exit;
 }
 
-
 /* === Instantiate repository/service objects === */
 $EquipmentRepo = new EquipmentRepository($pdo);
 $ReservationService = new ReservationService($pdo, $config, $EquipmentRepo);
-$equipments = $EquipmentRepo->all();
 
+/* get equipment list for UI rendering (safe after repo instantiation) */
+$equipments = $EquipmentRepo->all();
 
 /* === Route AJAX actions (POST) === */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
@@ -60,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
       exit;
     }
 
+
     if ($action === 'submit') {
       // Extract and validate input fields
       $input = [
@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
       echo json_encode(['status' => 'ok', 'data' => $createResult]);
       exit;
     }
-
+    
     throw new RuntimeException('Unknown action');
   } catch (ValidationException $ve) {
     http_response_code(422);
@@ -95,13 +95,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
 }
 
 /* === GET: render booking form (the HTML you supplied, slightly embedded) === */
-
 /* get equipment list for UI buttons */
-
 $message = $_SESSION['message'] ?? '';
 unset($_SESSION['message']);
-
-/* Render minimal page header + include the user's HTML form (adapted to insert PHP vars) */
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -143,6 +139,7 @@ unset($_SESSION['message']);
           <select name="type" id="type" required>
             <option value="Study" selected>Study</option>
             <option value="Gathering">Gathering</option>
+            <option value="Event">Event</option>
           </select>
           <!-- ===== Column 1 ===== -->
           <div class="column">
@@ -204,16 +201,27 @@ unset($_SESSION['message']);
         <div class="equipment-wrapper">
           <label>Rental Equipment (Optional):</label>
           <div class="column-equipment">
+            <?php
+            // Map equipment codes to  icons
+            $equipmentIcons = [
+              'PROJECTOR'   => 'assets/images/icons/projector-white.png',
+              'SPEAKER_MIKE' => 'assets/images/icons/microphone-white.png',
+              // add more as needed
+            ];
+            ?>
+
             <?php foreach ($equipments as $eq): ?>
+              <?php
+              $iconSrc = $equipmentIcons[$eq['code']] ?? 'fa-solid fa-box'; // default icon if not found
+              ?>
               <button type="button" class="equipment-btn" data-code="<?= htmlspecialchars($eq['code']) ?>">
-                <span class="icon">📦</span>
+                <span class="icon"><img src="<?= $iconSrc ?>"></img></span>
                 <?= htmlspecialchars($eq['name']) ?>
                 <span class="price">
                   ₱<?= number_format((float)$eq['rate_per_hour'], 2) ?>/hr
                 </span>
               </button>
             <?php endforeach; ?>
-
           </div>
         </div>
 

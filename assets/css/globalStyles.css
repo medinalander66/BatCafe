@@ -27,6 +27,7 @@
   --scale-button-hover: scale(1.03);
   --filter-invert-hover-accent-color: invert(40%) sepia(80%) saturate(600%)
     hue-rotate(10deg) brightness(95%) contrast(90%);
+
 }
 
 /* 🌙 Dark Mode Overrides */
@@ -56,6 +57,9 @@ body.dark-mode {
   --button-selected-bg: #2a7d2d;
   --shadow-color: rgba(5, 5, 5, 0.085);
   --text-color-accent: #daa239;
+  --filter-invert-hover-accent-color: invert(40%) sepia(80%) saturate(600%)
+    hue-rotate(10deg) brightness(95%) contrast(90%);
+
 }
 
 /* ---------------------------
@@ -91,39 +95,12 @@ main{
 }
 
 
-
-body::before,
-body::after {
-  content: "";
-  position: absolute;
-  width: 400px;
-  height: 600px;
-  border-radius: 50%;
-  filter: blur(180px);
-  opacity: 0.25;
-  z-index: -1;
-  pointer-events: none;
-}
-
-/* LEFT GLOW */
-body::before {
-  background: var(--bg-accent2-color);
-  top: -150px;
-  left: 50px;
-}
-
-/* RIGHT GLOW */
-body::after {
-  background: var(--bg-accent3-color);
-  top: -150px;
-  right: -200px;
-}
-
 /* 🚫 Disable transitions temporarily on page load */
 body.no-transition,
 body.no-transition * {
   transition: none !important;
 }
+
 
 .msg {
   color: #8f0404;
@@ -538,7 +515,12 @@ body.no-transition * {
   transform: scale(1.15);
 }
 
+
 /* ---------- Owner Info ---------- */
+.owner-info{
+  display: flex;
+  flex-direction: column;
+}
 .owner-info p {
   display: flex;
   align-items: center;
@@ -555,6 +537,10 @@ body.no-transition * {
 
 /* ---------- Responsive for footer mobile ---------- */
 @media (max-width: 768px) {
+  .owner-info{
+    margin-top: 40px;
+    align-items: center;
+  }
   .footer {
     flex-direction: column;
     text-align: center;

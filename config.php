@@ -13,7 +13,7 @@ return (object)[
     ],
     // Business rates and constants (centralized)
     'rates' => (object)[
-        'base_hourly_rate' => 50.00,    // PHP
+        // PHP
         'minimum_fee'      => 75.00,
         // equipment codes => per-hour fee
         'equipment' => [

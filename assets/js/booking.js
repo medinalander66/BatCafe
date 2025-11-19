@@ -77,40 +77,46 @@ document.addEventListener("DOMContentLoaded", function () {
   monthSelect.addEventListener("change", populateDays);
 
   // Helper to add/subtract minutes with boundaries (13:00 → 01:00 next day)
-  flatpickr("#start_time", {
+ flatpickr(startTimeInput, { 
     enableTime: true,
     noCalendar: true,
-    time_24hr: false,
+    time_24hr: true,           // store time in 24-hour format
     minuteIncrement: 30,
-    defaultDate: "13:00",
-    minTime: "13:00",
-    maxTime: "01:00", // flatpickr supports overnight
-    dateFormat: "h:i K",
-  });
+    defaultDate: "13:00",      // 1:00 PM in 24-hour
+    disable: [
+        function(date) {
+            const h = date.getHours();
+            const m = date.getMinutes();
 
-  increaseBtn.addEventListener("click", () =>
+            // Allowed: 13:00 - 23:30 AND 00:00 - 01:00
+            if ((h >= 13 && h <= 23) || (h >= 0 && h <= 1)) {
+                if (h === 23 && m > 30) return true;  // disable after 23:30
+                if (h === 1 && m > 0) return true;    // disable after 01:00
+                return false; // allowed
+            }
+            return true; // disable everything else
+        }
+    ],
+    
+    altInput: true,             // show alternate display input
+    altFormat: "h:i K",         // 12-hour display (e.g., 1:00 PM)
+    dateFormat: "H:i"           // actual value sent to PHP in 24-hour format
+});
+
+// Optional: buttons to increase/decrease by 30 minutes
+increaseBtn.addEventListener("click", () =>
     adjustFlatpickrTime(startTimeInput, 30)
-  );
-  decreaseBtn.addEventListener("click", () =>
+);
+decreaseBtn.addEventListener("click", () =>
     adjustFlatpickrTime(startTimeInput, -30)
-  );
+);
 
-  function adjustFlatpickrTime(input, minutes) {
-    const fp = input._flatpickr;
-    if (!fp) return;
+function adjustFlatpickrTime(input, minutes) {
+    let date = input._flatpickr.selectedDates[0] || new Date();
+    date.setMinutes(date.getMinutes() + minutes);
+    input._flatpickr.setDate(date, true);
+}
 
-    let date = fp.selectedDates[0] || new Date();
-    date.setHours(date.getHours(), date.getMinutes() + minutes);
-
-    // Handle wrapping past max/min
-    const minTime = fp.parseDate(fp.config.minTime, "H:i");
-    const maxTime = fp.parseDate(fp.config.maxTime, "H:i");
-
-    if (date < minTime) date = maxTime;
-    if (date > maxTime) date = minTime;
-
-    fp.setDate(date, true); // update input and trigger change
-  }
 
   // equipment selection set
   const selectedEquipment = new Set();
@@ -125,6 +131,8 @@ document.addEventListener("DOMContentLoaded", function () {
         selectedEquipment.add(code);
         btn.classList.add("selected");
       }
+      // Recalculate dynamically on click
+      calculateEstimate(false);
     });
   });
 
@@ -161,18 +169,14 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Calculate button - AJAX call to booking.php?action=calculate
-  calculateBtn.addEventListener("click", function () {
+  calculateBtn.addEventListener("click", () => {
     const fd = gatherFormData();
     const body = new FormData();
     body.append("action", "calculate");
     body.append("hours", fd.hours);
-    // append equipment as multiple values
     for (const code of fd.equipment) body.append("equipment[]", code);
 
-    fetch("booking.php", {
-      method: "POST",
-      body: body,
-    })
+    fetch("booking.php", { method: "POST", body })
       .then(async (res) => {
         if (!res.ok) {
           const err = await res.json().catch(() => null);
@@ -181,7 +185,19 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         const json = await res.json();
         if (json.status === "ok") {
-          showEstimate(json.data);
+          // Update the cost numbers
+          roomFeeVal.textContent = formatPHP(json.data.room_fee);
+          equipmentFeeVal.textContent = formatPHP(json.data.equipment_fee);
+          totalFeeVal.textContent = formatPHP(json.data.total);
+
+          // Toggle wrapper display
+          if (costWrapper.style.display === "flex") {
+            costWrapper.style.display = "none";
+            calculateBtn.textContent = "Show Estimate";
+          } else {
+            costWrapper.style.display = "flex";
+            calculateBtn.textContent = "Hide Estimate";
+          }
         } else {
           alert("Error: " + JSON.stringify(json));
         }
@@ -213,7 +229,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (json.status === "ok") {
           // Only show the wrapper if explicitly requested
           if (showWrapper) costWrapper.style.display = "flex";
-
           // Always update the numbers
           roomFeeVal.textContent = formatPHP(json.data.room_fee);
           equipmentFeeVal.textContent = formatPHP(json.data.equipment_fee);
@@ -229,7 +244,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // === Button click triggers calculation and shows wrapper ===
-  calculateBtn.addEventListener("click", () => calculateEstimate(true));
 
   // === Dynamic calculation on form changes, without showing wrapper ===
   const formElements = document.querySelectorAll("input, select");
